@@ -13,25 +13,38 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
+import edu.wpi.first.math.controller.PIDController;
+
 public class SwerveModule_SS extends SubsystemBase {
 
   private final CANSparkMax driveMotor;
   private final CANSparkMax steerMotor;
   private final CANcoder canhihi;
+
+  private final PIDController pidController;
    
 
   public SwerveModule_SS(int driveMotorID, int steerMotorID, int canhihiID) {
     driveMotor = new CANSparkMax(driveMotorID, MotorType.kBrushless);
     steerMotor = new CANSparkMax(steerMotorID, MotorType.kBrushless);
     canhihi = new CANcoder(canhihiID);
+
+// PLEASE TUNE PLEASE TUNE PLEASE TUNE PLEASE TUNE PLEASE TUNE PLEASE TUNE PLEASE TUNE PLEASE TUNE PLEASE TUNE PLEASE TUNE 
+    pidController = new PIDController(0.1, 0, 0);
+    pidController.enableContinuousInput(-180, 180);
   }
 
   public void setDesiredSpeeds(SwerveModuleState state) {
-    double speedinessiroonie = state.speedMetersPerSecond;
+    double speed = state.speedMetersPerSecond;
     double wantedAngle = state.angle.getDegrees();
 
-    driveMotor.set(speedinessiroonie);
-    steerMotor.set(wantedAngle);
+    double currentAngle = canhihi.getAbsolutePosition().getValue(); 
+
+    double turnOutput = pidController.calculate(currentAngle, wantedAngle);
+
+
+    driveMotor.set(speed);
+    steerMotor.set(turnOutput);
   }
 
 
@@ -44,5 +57,6 @@ public class SwerveModule_SS extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    System.out.println();
   }
 }
