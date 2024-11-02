@@ -87,11 +87,11 @@ public class SwerveSubsystem extends SubsystemBase
     SwerveDriveTelemetry.verbosity = TelemetryVerbosity.HIGH;
     try
     {
-      swerveDrive = new SwerveParser(directory).createSwerveDrive(Constants.MAX_SPEED);
+      //swerveDrive = new SwerveParser(directory).createSwerveDrive(Constants.MAX_SPEED);
       //swerveDrive.setCosineCompensator(true);
-      swerveDrive.setAutoCenteringModules(false);
+      //swerveDrive.setAutoCenteringModules(false);
       //swerveDrive.setMaximumSpeeds(0.5,0.5,0.5);      // Alternative method if you don't want to supply the conversion factor via JSON files.
-      // swerveDrive = new SwerveParser(directory).createSwerveDrive(maximumSpeed, angleConversionFactor, driveConversionFactor);
+      swerveDrive = new SwerveParser(directory).createSwerveDrive(Constants.MAX_SPEED, angleConversionFactor, driveConversionFactor);
     } catch (Exception e)
     {
       throw new RuntimeException(e);
