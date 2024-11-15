@@ -13,8 +13,11 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.commands.swervedrive.Actuator_down_CMD;
+import frc.robot.commands.swervedrive.Actuator_up_CMD;
 import frc.robot.commands.swervedrive.AimAtTarget_CMD;
 import frc.robot.commands.swervedrive.drivebase.AbsoluteDriveAdv;
+import frc.robot.subsystems.swervedrive.Actuator_SS;
 import frc.robot.subsystems.swervedrive.AimAndAlign_SS;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 /**
@@ -31,6 +34,10 @@ public class RobotContainer
   private final AimAndAlign_SS AimAndAlign_SS = new AimAndAlign_SS();
   private final SwerveSubsystem drivebase = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
                                                                          "swerve/neo"));
+  private final Actuator_SS mActuator_SS = new Actuator_SS();
+  private final Actuator_up_CMD mActuator_up_CMD = new Actuator_up_CMD(mActuator_SS);
+  private final Actuator_down_CMD mActuator_down_CMD = new Actuator_down_CMD(mActuator_SS);
+
 
                                                                     
 
@@ -102,6 +109,9 @@ public class RobotContainer
    */
   private void configureBindings()
   {
+    driverXbox.b().whileTrue(mActuator_up_CMD);
+    driverXbox.y().whileTrue(mActuator_down_CMD);
+
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
 
     //driverXbox.a().onTrue((Commands.runOnce(drivebase::zeroGyro)));
