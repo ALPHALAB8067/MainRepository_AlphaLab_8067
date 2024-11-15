@@ -10,53 +10,42 @@ import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonUtils;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
+import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class AimAndAlign_SS extends SubsystemBase {
+public class DistanceFromAprilTag extends SubsystemBase {
   /** Creates a new AimAndAlign_SS. */
 
   boolean targetVisible = false; 
-  double targetYaw = 0.0;
   PhotonCamera camera = new PhotonCamera("photo2");
   double iD;
 
-  public AimAndAlign_SS() {
+  double x;
+  public DistanceFromAprilTag() {
 
-  
-  }
-
-  public double AimAtApril(double turnKP, double maxturnspeed){
-     var results = camera.getLatestResult();
-
-     if (results.hasTargets()){
-      var target = results.getBestTarget();
-      targetYaw = target.getYaw();
-      targetVisible = true;
-      iD = target.getFiducialId();
-      }  
-    double turn = 1.0 * targetYaw * turnKP * maxturnspeed;
     
-    return turn;
   }
 
-  public double WhichPosition(){
- var results = camera.getLatestResult();
+  public double metersfromapriltagx(){
+    var results = camera.getLatestResult();
 
     if (results.hasTargets()){
       var target = results.getBestTarget();
-      targetYaw = target.getYaw();
+      Transform3d bestcameratotarget = target.getBestCameraToTarget();
+      x = bestcameratotarget.getX();
       targetVisible = true;
       iD = target.getFiducialId();
       }  
-    return iD;
+      return x;
+    
     }
-      
+    
 
-  @Override 
+  @Override
   public void periodic() {
-    SmartDashboard.putNumber("Position", WhichPosition());
     SmartDashboard.putBoolean("Icanseeyou", camera.getLatestResult().hasTargets());
     // This method will be called once per scheduler run
+
   }
 }

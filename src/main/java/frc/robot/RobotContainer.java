@@ -16,7 +16,11 @@ import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.swervedrive.AimAtTarget_CMD;
 import frc.robot.commands.swervedrive.drivebase.AbsoluteDriveAdv;
 import frc.robot.subsystems.swervedrive.AimAndAlign_SS;
+import frc.robot.subsystems.swervedrive.AimAndCome;
+import frc.robot.subsystems.swervedrive.AlignAprilTag;
+import frc.robot.subsystems.swervedrive.DistanceFromAprilTag;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
+import frc.robot.commands.swervedrive.distance;
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a "declarative" paradigm, very
  * little robot logic should actually be handled in the {@link Robot} periodic methods (other than the scheduler calls).
@@ -32,7 +36,10 @@ public class RobotContainer
   private final SwerveSubsystem drivebase = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
                                                                          "swerve/neo"));
 
-                                                                    
+  private final DistanceFromAprilTag distanceFromAprilTag = new DistanceFromAprilTag();
+  private final distance distance = new distance(distanceFromAprilTag);
+  private final AimAndCome aimAndCome = new AimAndCome();   
+  private final AlignAprilTag alignAprilTag = new AlignAprilTag();                            
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -110,14 +117,31 @@ public class RobotContainer
        // Commands.deferredProxy(() -> drivebase.driveToPose(
          //                          new Pose2d(new Translation2d(4, 4), Rotation2d.fromDegrees(0)))
            //                   ));
-    driverXbox.x().whileTrue(drivebase.aimAtSpeaker(2));
+    driverXbox.x().whileTrue(
+      drivebase.driveCommand(
+        () -> MathUtil.applyDeadband(alignAprilTag.ForwardAim(1, 0.85), OperatorConstants.LEFT_Y_DEADBAND),
+        () ->  MathUtil.applyDeadband((aimAndCome.ForwardAim(1,0.85)), OperatorConstants.LEFT_X_DEADBAND),
+        () -> AimAndAlign_SS.AimAtApril(0.1 ,0.3)));
+
 
     driverXbox.a().whileTrue(
       drivebase.driveCommand(
         () -> MathUtil.applyDeadband(driverXbox.getLeftY() , OperatorConstants.LEFT_Y_DEADBAND),
         () -> MathUtil.applyDeadband(driverXbox.getLeftX() , OperatorConstants.LEFT_X_DEADBAND),
-        () -> AimAndAlign_SS.AimAtApril(0.1 ,0.8)));
-    // driverXbox.x().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
+        () -> AimAndAlign_SS.AimAtApril(0.1 ,0.3)));
+
+
+      driverXbox.b().whileTrue(
+       drivebase.driveCommand(
+        () -> MathUtil.applyDeadband(alignAprilTag.ForwardAim(1, 0.8), OperatorConstants.LEFT_Y_DEADBAND),
+        () -> MathUtil.applyDeadband(driverXbox.getLeftX() , OperatorConstants.LEFT_X_DEADBAND),
+        () -> driverXbox.getRightX() * 0.8));    // driverXbox.x().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
+      
+      driverXbox.y().whileTrue(
+      drivebase.driveCommand(
+        () -> MathUtil.applyDeadband(driverXbox.getLeftY() , OperatorConstants.LEFT_Y_DEADBAND),
+        () ->  MathUtil.applyDeadband((aimAndCome.ForwardAim(1,0.8)), OperatorConstants.LEFT_X_DEADBAND),
+        () -> driverXbox.getRightX() * 0.8));    // driverXbox.x().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
   }
 
   /**
