@@ -16,7 +16,11 @@ import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.swervedrive.Actuator_down_CMD;
 import frc.robot.commands.swervedrive.Actuator_up_CMD;
 import frc.robot.commands.swervedrive.AimAtTarget_CMD;
+import frc.robot.commands.swervedrive.Shoot_CMD;
+import frc.robot.commands.swervedrive.Suck_CMD;
 import frc.robot.commands.swervedrive.drivebase.AbsoluteDriveAdv;
+import frc.robot.subsystems.Scoop_SS;
+import frc.robot.subsystems.Shooter_SS;
 import frc.robot.subsystems.swervedrive.Actuator_SS;
 import frc.robot.subsystems.swervedrive.AimAndAlign_SS;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
@@ -37,6 +41,11 @@ public class RobotContainer
   private final Actuator_SS mActuator_SS = new Actuator_SS();
   private final Actuator_up_CMD mActuator_up_CMD = new Actuator_up_CMD(mActuator_SS);
   private final Actuator_down_CMD mActuator_down_CMD = new Actuator_down_CMD(mActuator_SS);
+  private final Scoop_SS mScoop_SS = new Scoop_SS();
+
+  private final Shooter_SS mShooter_SS = new Shooter_SS();
+  private final Suck_CMD mSuck_CMD = new Suck_CMD(mShooter_SS);
+  private final Shoot_CMD mShoot_CMD = new Shoot_CMD(mShooter_SS);
 
 
                                                                     
@@ -100,20 +109,15 @@ public class RobotContainer
         !RobotBase.isSimulation() ? driveFieldOrientedAnglularVelocity : driveFieldOrientedDirectAngleSim);
   }
 
-  /**
-   * Use this method to define your trigger->command mappings. Triggers can be created via the
-   * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with an arbitrary predicate, or via the
-   * named factories in {@link edu.wpi.first.wpilibj2.command.button.CommandGenericHID}'s subclasses for
-   * {@link CommandXboxController Xbox}/{@link edu.wpi.first.wpilibj2.command.button.CommandPS4Controller PS4}
-   * controllers or {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight joysticks}.
-   */
+ 
   private void configureBindings()
   {
     driverXbox.b().whileTrue(mActuator_up_CMD);
     driverXbox.y().whileTrue(mActuator_down_CMD);
 
-    // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
-
+    driverXbox.leftBumper().whileTrue(mShoot_CMD);
+    driverXbox.rightBumper().whileTrue(mSuck_CMD);
+    
     //driverXbox.a().onTrue((Commands.runOnce(drivebase::zeroGyro)));
     //driverXbox.x().onTrue(Commands.runOnce(drivebase::addFakeVisionReading));
     //driverXbox.b().whileTrue(

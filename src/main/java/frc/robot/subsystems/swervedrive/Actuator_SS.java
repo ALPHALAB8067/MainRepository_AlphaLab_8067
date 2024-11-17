@@ -15,11 +15,9 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class Actuator_SS extends SubsystemBase {
 
   private final CANSparkMax mActuator;
-  private final RelativeEncoder mEncoder;
-  private final DigitalInput mDigitalInput;
-  private final SparkPIDController mPIDcontroller;
+  //private final RelativeEncoder mEncoder;
+  //private final SparkPIDController mPIDcontroller;
   public double kP, kI, kD, kIz, kFF, kMaxOutput, kMinOutput;
-  public boolean mLimitSwitch;
 
   /** Creates a new Actuator_SS. */
   public Actuator_SS() {
@@ -30,10 +28,9 @@ public class Actuator_SS extends SubsystemBase {
     kFF = 0; 
     kMaxOutput = 0.85; 
     kMinOutput = -0.85;
-  mDigitalInput = new DigitalInput(9);
   mActuator = new CANSparkMax(23,MotorType.kBrushed); 
-  mEncoder = mActuator.getEncoder();
-  mPIDcontroller = mActuator.getPIDController();
+  //mEncoder = mActuator.getEncoder();
+  //mPIDcontroller = mActuator.getPIDController();
 
   }
   public void Actuator_up (){
@@ -50,6 +47,5 @@ public class Actuator_SS extends SubsystemBase {
 
   public void periodic() {
     // This method will be called once per scheduler run
-    mLimitSwitch = mDigitalInput.get();
   }
 }
