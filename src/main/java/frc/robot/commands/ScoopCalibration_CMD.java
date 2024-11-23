@@ -2,19 +2,17 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands.swervedrive;
+package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.Shooter_SS;
+import frc.robot.subsystems.Scoop_SS;
 
-public class Suck_CMD extends Command {
-  /** Creates a new Shoot_CMD. */
-
-  private final Shooter_SS mShooter_SS;
-
-  public Suck_CMD(Shooter_SS pShooter_SS) {
+public class ScoopCalibration_CMD extends Command {
+  /** Creates a new ScoopTest_CMD. */
+  Scoop_SS mScoop_SS;
+  public ScoopCalibration_CMD(Scoop_SS pScoop_SS) {
     // Use addRequirements() here to declare subsystem dependencies.
-    mShooter_SS = pShooter_SS;
+    mScoop_SS = pScoop_SS;
   }
 
   // Called when the command is initially scheduled.
@@ -24,7 +22,7 @@ public class Suck_CMD extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    mShooter_SS.suck();
+    mScoop_SS.ScoopCalibration();
   }
 
   // Called once the command ends or is interrupted.
@@ -34,6 +32,6 @@ public class Suck_CMD extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return mScoop_SS.ScoopCalibrationDone;
   }
 }

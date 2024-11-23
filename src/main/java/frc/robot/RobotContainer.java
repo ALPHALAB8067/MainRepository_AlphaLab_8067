@@ -13,15 +13,21 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
-import frc.robot.commands.swervedrive.Actuator_down_CMD;
-import frc.robot.commands.swervedrive.Actuator_up_CMD;
+import frc.robot.commands.ScoopCalibration_CMD;
+import frc.robot.commands.ScoopDOWN_CMD;
+import frc.robot.commands.ScoopToPosition_CMD;
+import frc.robot.commands.ScoopUP_CMD;
+import frc.robot.commands.ActuatorCalibration_CMD;
+import frc.robot.commands.ActuatorToPosition_CMD;
+import frc.robot.commands.Actuator_down_CMD;
+import frc.robot.commands.Actuator_up_CMD;
 import frc.robot.commands.swervedrive.AimAtTarget_CMD;
-import frc.robot.commands.swervedrive.Shoot_CMD;
-import frc.robot.commands.swervedrive.Suck_CMD;
+import frc.robot.commands.Shoot_CMD;
+import frc.robot.commands.Suck_CMD;
 import frc.robot.commands.swervedrive.drivebase.AbsoluteDriveAdv;
+import frc.robot.subsystems.Actuator_SS;
 import frc.robot.subsystems.Scoop_SS;
 import frc.robot.subsystems.Shooter_SS;
-import frc.robot.subsystems.swervedrive.Actuator_SS;
 import frc.robot.subsystems.swervedrive.AimAndAlign_SS;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 /**
@@ -41,11 +47,22 @@ public class RobotContainer
   private final Actuator_SS mActuator_SS = new Actuator_SS();
   private final Actuator_up_CMD mActuator_up_CMD = new Actuator_up_CMD(mActuator_SS);
   private final Actuator_down_CMD mActuator_down_CMD = new Actuator_down_CMD(mActuator_SS);
+  private final ActuatorCalibration_CMD mActuatorCalibration_CMD = new ActuatorCalibration_CMD(mActuator_SS);
+  private final ActuatorToPosition_CMD mActuatorToPosition_CMD = new ActuatorToPosition_CMD(mActuator_SS, 10);
+  //position en degré
+
   private final Scoop_SS mScoop_SS = new Scoop_SS();
+  private final ScoopCalibration_CMD mScoopCalibration_CMD = new ScoopCalibration_CMD(mScoop_SS);
+  private final ScoopDOWN_CMD mScoopDOWN_CMD = new ScoopDOWN_CMD(mScoop_SS);
+  private final ScoopUP_CMD mScoopUP_CMD = new ScoopUP_CMD(mScoop_SS);
+  private final ScoopToPosition_CMD mScoopToPosition_CMD = new ScoopToPosition_CMD(mScoop_SS ,0 );
+  //position a mettre en degré
 
   private final Shooter_SS mShooter_SS = new Shooter_SS();
   private final Suck_CMD mSuck_CMD = new Suck_CMD(mShooter_SS);
   private final Shoot_CMD mShoot_CMD = new Shoot_CMD(mShooter_SS);
+
+
 
 
                                                                     
@@ -112,11 +129,17 @@ public class RobotContainer
  
   private void configureBindings()
   {
-    driverXbox.b().whileTrue(mActuator_up_CMD);
-    driverXbox.y().whileTrue(mActuator_down_CMD);
+    driverXbox.y().whileTrue(mScoopUP_CMD);
+    driverXbox.b().whileTrue(mScoopDOWN_CMD);
 
     driverXbox.leftBumper().whileTrue(mShoot_CMD);
     driverXbox.rightBumper().whileTrue(mSuck_CMD);
+
+    driverXbox.povLeft().onTrue(mActuatorCalibration_CMD);
+    driverXbox.povRight().onTrue(mScoopCalibration_CMD);
+    driverXbox.povUp().whileTrue(mActuator_up_CMD);
+    driverXbox.povDown().whileTrue(mActuator_down_CMD);
+
     
     //driverXbox.a().onTrue((Commands.runOnce(drivebase::zeroGyro)));
     //driverXbox.x().onTrue(Commands.runOnce(drivebase::addFakeVisionReading));

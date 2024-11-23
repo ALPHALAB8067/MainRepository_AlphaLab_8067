@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -21,23 +22,29 @@ public class Shooter_SS extends SubsystemBase {
   public Shooter_SS() {
      
     mLeftMotorMaster = new CANSparkMax(19, MotorType.kBrushless);
+    mLeftMotorMaster.setIdleMode(IdleMode.kCoast);
     mLeftMotorSlave = new CANSparkMax(20, MotorType.kBrushless);
+    mLeftMotorSlave.setIdleMode(IdleMode.kCoast);
     mRightMotorMaster = new CANSparkMax(21, MotorType.kBrushless);
+    mRightMotorMaster.setIdleMode(IdleMode.kCoast);
     mRightMotorSlave = new CANSparkMax(22, MotorType.kBrushless);
+    mRightMotorSlave.setIdleMode(IdleMode.kCoast);
 
     mLeftMotorSlave.follow(mLeftMotorMaster);
     mRightMotorSlave.follow(mRightMotorMaster);
 
+    mLeftMotorMaster.setInverted(true);
+    mRightMotorMaster.setInverted(true);
   }
 
   public void shoot() {
-    mLeftMotorMaster.set(0.5);
-    mRightMotorMaster.set(0.5);
+    mLeftMotorMaster.set(0.2);
+    mRightMotorMaster.set(0.2);
   }
 
   public void suck() {
-    mLeftMotorMaster.set(-0.5);
-    mRightMotorMaster.set(-0.5);
+    mLeftMotorMaster.set(-0.05);
+    mRightMotorMaster.set(-0.05);
   }
 
   public void stop() {
