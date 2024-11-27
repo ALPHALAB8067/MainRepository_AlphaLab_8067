@@ -19,9 +19,16 @@ public class DistanceFromAprilTag extends SubsystemBase {
 
   boolean targetVisible = false; 
   PhotonCamera camera = new PhotonCamera("photo2");
-  double iD;
+  int iD;
 
   double x;
+  double H = 3.048;
+  double a = 0.0;
+  double d = 0.0;
+  double S = -65;
+  double v = 0.0;
+
+
   public DistanceFromAprilTag() {
 
     
@@ -40,7 +47,49 @@ public class DistanceFromAprilTag extends SubsystemBase {
       return x;
     
     }
+
     
+    
+  public double distancefrombasket(){
+      switch (iD) {
+          case 1:
+              return x + 6.10008818;
+          case 2:
+              return x + 6.25027006;
+          case 3:
+              return x + 6.09805508;
+          case 4:
+              return x + 6.25027006;
+          case 5:
+              return x + 6.10008818;
+          default:
+              return 0.0;
+      }
+}
+
+  public double calculateangle(){
+  
+    d = distancefrombasket();
+    double numerator = Math.tan(S) * distancefrombasket() - 2 * H;
+    double denominator = -d;
+    a = Math.atan(numerator / denominator);
+    return a; 
+    }    
+
+  public double calculatespeed(){
+  
+    d = distancefrombasket();
+    double result = Math.sqrt(
+      -((9.8 * Math.pow(d, 2) * (1 + Math.pow(Math.tan(a), 2))) / (2 * H - 2 * d * Math.tan(a)))
+  );
+    v = result;
+    return result; 
+    }    
+
+
+  
+
+  
 
   @Override
   public void periodic() {
