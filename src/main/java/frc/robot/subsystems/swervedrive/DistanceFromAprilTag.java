@@ -86,7 +86,22 @@ public class DistanceFromAprilTag extends SubsystemBase {
     return result; 
     }    
 
+  public double calculateRPMout(){
+    
+    double rpm = ((v / 1037) * 6000) / 47.87; 
+    return rpm;
+   }
 
+  public double calculateRPMmotor(){
+    double conversion = 5.95;
+    double beltconversion = 1.75;
+    double RPMmotor = (calculateRPMout()/1.75) * 5.95;
+    return RPMmotor;
+}
+  public double motor(){
+    double Puissance = calculateRPMmotor()/5676;
+    return Puissance;
+  }
   
 
   
