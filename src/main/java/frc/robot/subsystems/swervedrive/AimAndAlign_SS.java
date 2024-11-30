@@ -59,4 +59,9 @@ public class AimAndAlign_SS extends SubsystemBase {
     SmartDashboard.putBoolean("Icanseeyou", camera.getLatestResult().hasTargets());
     // This method will be called once per scheduler run
   }
+
+  public double ForwardAim(int i, double d) {
+    // TODO Auto-generated method stub
+    throw new UnsupportedOperationException("Unimplemented method 'ForwardAim'");
+  }
 }

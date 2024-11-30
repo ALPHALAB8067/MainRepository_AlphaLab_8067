@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.automatedcommands.Getinthebox_AutoCMD;
 import frc.robot.commands.ScoopCalibration_CMD;
 import frc.robot.commands.ScoopDOWN_CMD;
 import frc.robot.commands.ScoopToPosition_CMD;
@@ -47,14 +48,13 @@ public class RobotContainer
   final CommandXboxController driverXbox = new CommandXboxController(0);
   // The robot's subsystems and commands are defined here...
   private final AimAndAlign_SS AimAndAlign_SS = new AimAndAlign_SS();
-  private final SwerveSubsystem drivebase = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
+  public final SwerveSubsystem drivebase = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
                                                                          "swerve/neo"));
   private final Actuator_SS mActuator_SS = new Actuator_SS();
   private final Actuator_up_CMD mActuator_up_CMD = new Actuator_up_CMD(mActuator_SS);
   private final Actuator_down_CMD mActuator_down_CMD = new Actuator_down_CMD(mActuator_SS);
   private final ActuatorCalibration_CMD mActuatorCalibration_CMD = new ActuatorCalibration_CMD(mActuator_SS);
   private final ActuatorToPosition_CMD mActuatorToPosition_CMD = new ActuatorToPosition_CMD(mActuator_SS, 10);
-
   //position en degré
 
   private final Scoop_SS mScoop_SS = new Scoop_SS();
@@ -78,6 +78,7 @@ public class RobotContainer
   private final distance distance = new distance(distanceFromAprilTag);
   private final AimAndCome aimAndCome = new AimAndCome();   
   private final AlignAprilTag alignAprilTag = new AlignAprilTag();                            
+private final Getinthebox_AutoCMD mGetinthebox_AutoCMD = new Getinthebox_AutoCMD(drivebase, aimAndCome, AimAndAlign_SS);
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -141,13 +142,14 @@ public class RobotContainer
  
   private void configureBindings()
   {
-    driverXbox.y().whileTrue(mScoopUP_CMD);
-    driverXbox.b().whileTrue(mScoopDOWN_CMD);
+  //  driverXbox.y().whileTrue(mScoopUP_CMD);
+    // driverXbox.b().whileTrue(mScoopDOWN_CMD);
 
   //  driverXbox.leftBumper().whileTrue(mShoot_CMD);
     driverXbox.rightBumper().whileTrue(mSuck_CMD);
-    driverXbox.a().whileTrue(mShoot_CMDautomatic);
+    // driverXbox.a().whileTrue(mShoot_CMDautomatic);
     driverXbox.x().whileTrue(mActuatorToPosition_CMDprecise);
+
 
     driverXbox.povLeft().onTrue(mActuatorCalibration_CMD);
     driverXbox.povRight().onTrue(mScoopCalibration_CMD);
@@ -175,19 +177,20 @@ public class RobotContainer
         () -> MathUtil.applyDeadband(driverXbox.getLeftX() , OperatorConstants.LEFT_X_DEADBAND),
         () -> AimAndAlign_SS.AimAtApril(0.1 ,0.3)));
  */
-/*
+    driverXbox.a().whileTrue(mGetinthebox_AutoCMD);
       driverXbox.b().whileTrue(
        drivebase.driveCommand(
         () -> MathUtil.applyDeadband(alignAprilTag.ForwardAim(1, 0.8), OperatorConstants.LEFT_Y_DEADBAND),
         () -> MathUtil.applyDeadband(driverXbox.getLeftX() , OperatorConstants.LEFT_X_DEADBAND),
         () -> driverXbox.getRightX() * 0.8));    // driverXbox.x().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
       
+         
       driverXbox.y().whileTrue(
       drivebase.driveCommand(
         () -> MathUtil.applyDeadband(driverXbox.getLeftY() , OperatorConstants.LEFT_Y_DEADBAND),
-        () ->  MathUtil.applyDeadband((aimAndCome.ForwardAim(1,0.8)), OperatorConstants.LEFT_X_DEADBAND),
+        () ->  MathUtil.applyDeadband((aimAndCome.ForwardAim()), OperatorConstants.LEFT_X_DEADBAND),
         () -> driverXbox.getRightX() * 0.8));    // driverXbox.x().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
-         */
+         
   }
  
   /**

@@ -7,6 +7,7 @@ package frc.robot.subsystems.swervedrive;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonUtils;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -24,6 +25,11 @@ public class AlignAprilTag extends SubsystemBase {
   double forward;
   double y;
 
+ double kP = 0;
+  double kI = 0;
+  double kD = 0;
+
+  PIDController mPidController = new PIDController(kP, kI, kD);
 
   public AlignAprilTag() {
 
@@ -33,6 +39,7 @@ public class AlignAprilTag extends SubsystemBase {
   public double ForwardAim(double turnKP, double maxforwardspeed){
      var results = camera.getLatestResult();
 
+     
 
     if (results.hasTargets()){
       var target = results.getBestTarget();
@@ -44,10 +51,12 @@ public class AlignAprilTag extends SubsystemBase {
       y = bestcameratotarget.getY();
 
       }  
-    forward = y * turnKP * -maxforwardspeed;
-    System.out.println(forward);
-
-    return forward;
+    // forward = y * turnKP * -maxforwardspeed;
+    forward = (mPidController.calculate(y, 0));
+   
+    System.out.println("forward:" + -forward);
+    System.out.println("y" + y);
+   return forward;
   }
 
   public double WhichPosition(){

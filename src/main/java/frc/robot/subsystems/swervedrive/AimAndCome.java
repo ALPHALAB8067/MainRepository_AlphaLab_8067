@@ -8,9 +8,10 @@ import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonUtils;
 
 import edu.wpi.first.math.geometry.Transform3d;
-import edu.wpi.first.math.util.Units;
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.math.controller.PIDController;
 
 public class AimAndCome extends SubsystemBase {
   /** Creates a new AimAndAlign_SS. */
@@ -24,9 +25,14 @@ public class AimAndCome extends SubsystemBase {
   double forward;
   double x;
 
+  double kP = 0.9;
+  double kI = 0.01;
+  double kD = 0.0;
+
+  PIDController mPidController = new PIDController(kP, kI, kD);
+  
 
   public AimAndCome() {
-
   
   }
   
@@ -43,7 +49,7 @@ public class AimAndCome extends SubsystemBase {
       return x;
     
     }
-  public double ForwardAim(double turnKP, double maxforwardspeed){
+  public double ForwardAim(){
      var results = camera.getLatestResult();
 
 
@@ -64,8 +70,17 @@ public class AimAndCome extends SubsystemBase {
                                         Units.degreesToRadians(target.getPitch()));
 */
       }  
-    forward = (0.5 - x) * turnKP * -maxforwardspeed;
-    return forward;
+    
+
+    forward = (mPidController.calculate(x, 0.5));
+   
+     System.out.println("forward:" + -forward);
+     System.out.println("x" + x);
+    
+  
+     
+ 
+    return -forward;
   }
 
   public double WhichPosition(){
