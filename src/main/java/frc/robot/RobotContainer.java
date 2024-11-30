@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.ScoopCalibration_CMD;
 import frc.robot.commands.ScoopDOWN_CMD;
+import frc.robot.commands.ScoopToArm_CMD;
 import frc.robot.commands.ScoopToPosition_CMD;
 import frc.robot.commands.ScoopUP_CMD;
 import frc.robot.commands.ActuatorCalibration_CMD;
@@ -48,15 +49,16 @@ public class RobotContainer
   private final Actuator_up_CMD mActuator_up_CMD = new Actuator_up_CMD(mActuator_SS);
   private final Actuator_down_CMD mActuator_down_CMD = new Actuator_down_CMD(mActuator_SS);
   private final ActuatorCalibration_CMD mActuatorCalibration_CMD = new ActuatorCalibration_CMD(mActuator_SS);
-  private final ActuatorToPosition_CMD mActuatorToPosition_CMD = new ActuatorToPosition_CMD(mActuator_SS, 10);
-  //position en degré
+  private final ActuatorToPosition_CMD mActuatorToPosition_CMD = new ActuatorToPosition_CMD(mActuator_SS, 10.0);
+
 
   private final Scoop_SS mScoop_SS = new Scoop_SS();
   private final ScoopCalibration_CMD mScoopCalibration_CMD = new ScoopCalibration_CMD(mScoop_SS);
   private final ScoopDOWN_CMD mScoopDOWN_CMD = new ScoopDOWN_CMD(mScoop_SS);
   private final ScoopUP_CMD mScoopUP_CMD = new ScoopUP_CMD(mScoop_SS);
-  private final ScoopToPosition_CMD mScoopToPosition_CMD = new ScoopToPosition_CMD(mScoop_SS ,0 );
-  //position a mettre en degré
+  private final ScoopToPosition_CMD mScoopToPosition_CMD = new ScoopToPosition_CMD(mScoop_SS, 30.0 );
+  private final ScoopToArm_CMD mScoopToPosition2_CMD = new ScoopToArm_CMD(mScoop_SS,mActuator_SS);
+ 
 
   private final Shooter_SS mShooter_SS = new Shooter_SS();
   private final Suck_CMD mSuck_CMD = new Suck_CMD(mShooter_SS);
@@ -129,7 +131,7 @@ public class RobotContainer
  
   private void configureBindings()
   {
-    driverXbox.y().whileTrue(mScoopUP_CMD);
+    driverXbox.y().whileTrue(mScoopToPosition_CMD);
     driverXbox.b().whileTrue(mScoopDOWN_CMD);
 
     driverXbox.leftBumper().whileTrue(mShoot_CMD);

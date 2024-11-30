@@ -38,8 +38,8 @@ public class Shooter_SS extends SubsystemBase {
   }
 
   public void shoot() {
-    mLeftMotorMaster.set(0.2);
-    mRightMotorMaster.set(0.2);
+    mLeftMotorMaster.set(0.90);
+    mRightMotorMaster.set(1);
   }
 
   public void suck() {

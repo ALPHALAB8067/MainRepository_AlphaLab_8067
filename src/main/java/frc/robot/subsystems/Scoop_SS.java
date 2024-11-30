@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.DemandType;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
@@ -14,6 +15,11 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import java.util.concurrent.TimeUnit;
+
+import javax.swing.text.Position;
+
+import frc.robot.subsystems.Actuator_SS;
 
 public class Scoop_SS extends SubsystemBase {
 
@@ -21,38 +27,36 @@ public class Scoop_SS extends SubsystemBase {
   private final DigitalInput mLimitSwitch;
   public boolean ScoopCalibrationDone = false;
   //Need to check, either 2048 or 8192
-  final double ticksPerRev = 4096;
   final double gearRatio = 10;
-  final double degreesPerTick = 360 / (ticksPerRev * gearRatio);
-
-  final double kP = 0;
-  final double kI = 0;
-  final double kD = 0;
+  final double tickPerDegree = 40960 / 360;
 
   public Scoop_SS() {
     mLimitSwitch = new DigitalInput(9);
-
     mScoopMotor = new TalonSRX(24);
     //set factory default and set basic parameter (not nescessary)
     mScoopMotor.configFactoryDefault();
-    mScoopMotor.setNeutralMode(NeutralMode.Brake);
+    mScoopMotor.setNeutralMode(NeutralMode.Coast);
     //set what kind of feedback device we use
     mScoopMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative,0,30);
     //to use if forward on the motor is not equal to forward on sensor
-    mScoopMotor.setSensorPhase(false);
+    mScoopMotor.setSensorPhase(true);
     //mScoopMotor.configNeutralDeadband(0.04);
-    mScoopMotor.configAllowableClosedloopError(0,10 );
+    mScoopMotor.configAllowableClosedloopError(0,0 );
     //mScoopMotor.getSensorCollection();
 		mScoopMotor.selectProfileSlot(0, 0);
-		mScoopMotor.config_kP(0, 0.1, 30);
-		mScoopMotor.config_kI(0, 0, 30);
+		mScoopMotor.config_kP(0, 0.2, 30);
+    SmartDashboard.putNumber("kP",0.2);
+		mScoopMotor.config_kI(0, 0.0000, 30);
+    SmartDashboard.putNumber("kI",0.0000);
 		mScoopMotor.config_kD(0, 0, 30);
+    SmartDashboard.putNumber("kD",0);
     mScoopMotor.config_kF(0, 0, 30);
+    mScoopMotor.configClosedLoopPeakOutput(0,0.6);
   }
 
   public void ScoopCalibration (){
     if ( mLimitSwitch.get() == false) {
-    mScoopMotor.set(ControlMode.PercentOutput, -0.15);}
+    mScoopMotor.set(ControlMode.PercentOutput, 0);}
     else if (mLimitSwitch.get() == true) {
       mScoopMotor.set(ControlMode.PercentOutput,0);
       mScoopMotor.setSelectedSensorPosition(0);}
@@ -63,9 +67,12 @@ public class Scoop_SS extends SubsystemBase {
     mScoopMotor.set(ControlMode.PercentOutput, 0);
   }
   
-  public void gotoPosition(int pPosition){
-      SmartDashboard.putNumber("wanted Scoop position", pPosition);
-    mScoopMotor.set(ControlMode.MotionMagic, pPosition/degreesPerTick);
+  public void gotoPosition(Double pPosition){
+     
+    SmartDashboard.putNumber("wanted Scoop position",pPosition);
+    mScoopMotor.set(ControlMode.Position, pPosition * tickPerDegree);
+    //mScoopMotor.set(ControlMode.Position, 30 * tickPerDegree);
+
   }
 
   public void limitSwitch() {
@@ -74,17 +81,33 @@ public class Scoop_SS extends SubsystemBase {
     } 
   }
 
+  public boolean speed_0(){
+   return mScoopMotor.getSelectedSensorVelocity()== 0;
+  }
+
   public void scoopUP(){
-    mScoopMotor.set(ControlMode.PercentOutput,0.1);
+    mScoopMotor.set(ControlMode.PercentOutput,0.7);
+  }
+  public void scoopMedium(){
+    mScoopMotor.set(ControlMode.PercentOutput,0.15);
+    if (speed_0()) {
+      mScoopMotor.set(ControlMode.PercentOutput, 0);
+    }
   }
 
   public void scoopDOWN(){
-    mScoopMotor.set(ControlMode.PercentOutput,-0.1);
+    mScoopMotor.set(ControlMode.PercentOutput,0);
   }
   
   public double GetencoderInDegrees() {
-    return mScoopMotor.getSelectedSensorPosition() * degreesPerTick;
+    return mScoopMotor.getSelectedSensorPosition()/ tickPerDegree;
   }
+
+  
+  public void setBrakeMode() {
+    mScoopMotor.setNeutralMode(NeutralMode.Brake);
+  }
+  
   
 
   /* 
@@ -106,9 +129,17 @@ public class Scoop_SS extends SubsystemBase {
   @Override
   public void periodic() {
 
-    SmartDashboard.putBoolean("Scoop Limit switch", mLimitSwitch.get());
-    SmartDashboard.putNumber("encoder Value", getEncodervalue()); 
-    SmartDashboard.putNumber("Actual Angle", GetencoderInDegrees());  
+    mScoopMotor.config_kP(0, SmartDashboard.getNumber("kP",0), 30);
+		mScoopMotor.config_kI(0, SmartDashboard.getNumber("kI",0), 30);
+		mScoopMotor.config_kD(0,SmartDashboard.getNumber("kD",0), 30);
 
+  
+    SmartDashboard.putBoolean("Scoop Limit switch", mLimitSwitch.get());
+    SmartDashboard.putNumber("scoop encoder Value", getEncodervalue()); 
+    SmartDashboard.putNumber("Actual Angle", GetencoderInDegrees());  
+    SmartDashboard.putBoolean("ScoopSpeed 0", speed_0());
+    SmartDashboard.putNumber("Scoop Speed", mScoopMotor.getSelectedSensorVelocity());
+    SmartDashboard.putNumber("Degrees per tick", tickPerDegree);
+    SmartDashboard.putNumber("Scoop output",mScoopMotor.getMotorOutputPercent());
   }
 }
