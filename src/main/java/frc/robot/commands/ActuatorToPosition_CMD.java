@@ -10,8 +10,8 @@ import frc.robot.subsystems.Actuator_SS;
 public class ActuatorToPosition_CMD extends Command {
   /** Creates a new ActuatorToPosition_CMD. */
   Actuator_SS mActuator_SS;
-  int mPosition;
-  public ActuatorToPosition_CMD(Actuator_SS pActuator_SS, int Position) {
+  double mPosition;
+  public ActuatorToPosition_CMD(Actuator_SS pActuator_SS, double Position) {
     // Use addRequirements() here to declare subsystem dependencies.
     mActuator_SS = pActuator_SS;
     mPosition = Position;

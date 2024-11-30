@@ -9,6 +9,7 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkLowLevel.MotorType;
+import com.revrobotics.SparkRelativeEncoder.Type;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -24,8 +25,8 @@ public class Actuator_SS extends SubsystemBase {
 
   /** Creates a new Actuator_SS. */
   public Actuator_SS() {
-    kP = 0.1; 
-    kI = 0;
+    kP = 1; 
+    kI = 0.00001;
     kD = 0; 
     kIz = 0; 
     kFF = 0; 
@@ -35,7 +36,8 @@ public class Actuator_SS extends SubsystemBase {
   mActuator = new CANSparkMax(23,MotorType.kBrushed); 
   
   //encoder setup
-  mEncoder = mActuator.getEncoder();
+  mEncoder = mActuator.getEncoder(Type.kQuadrature, 8192);
+  mEncoder.setInverted(true);
   mEncoder.setPositionConversionFactor(240);
 
   //pid setup
@@ -72,7 +74,7 @@ public class Actuator_SS extends SubsystemBase {
     mActuator.set(0);
   }
 
-  public void gotoPosition(int pPosition){
+  public void gotoPosition(double pPosition){
     SmartDashboard.putNumber("wanted Actuator position", pPosition);
     mPIDcontroller.setReference(pPosition, ControlType.kPosition);
   }

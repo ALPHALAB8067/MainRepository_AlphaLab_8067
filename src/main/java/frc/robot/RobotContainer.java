@@ -23,6 +23,7 @@ import frc.robot.commands.Actuator_down_CMD;
 import frc.robot.commands.Actuator_up_CMD;
 import frc.robot.commands.swervedrive.AimAtTarget_CMD;
 import frc.robot.commands.Shoot_CMD;
+import frc.robot.commands.Shoot_CMDautomatic;
 import frc.robot.commands.Suck_CMD;
 import frc.robot.commands.swervedrive.drivebase.AbsoluteDriveAdv;
 import frc.robot.subsystems.Actuator_SS;
@@ -53,6 +54,7 @@ public class RobotContainer
   private final Actuator_down_CMD mActuator_down_CMD = new Actuator_down_CMD(mActuator_SS);
   private final ActuatorCalibration_CMD mActuatorCalibration_CMD = new ActuatorCalibration_CMD(mActuator_SS);
   private final ActuatorToPosition_CMD mActuatorToPosition_CMD = new ActuatorToPosition_CMD(mActuator_SS, 10);
+
   //position en degré
 
   private final Scoop_SS mScoop_SS = new Scoop_SS();
@@ -66,6 +68,9 @@ public class RobotContainer
   private final Suck_CMD mSuck_CMD = new Suck_CMD(mShooter_SS);
   private final Shoot_CMD mShoot_CMD = new Shoot_CMD(mShooter_SS);
 
+  private final DistanceFromAprilTag mDistanceFromAprilTag = new DistanceFromAprilTag();  
+  private final Shoot_CMDautomatic mShoot_CMDautomatic = new Shoot_CMDautomatic(mShooter_SS, mDistanceFromAprilTag.motor());
+    private final ActuatorToPosition_CMD mActuatorToPosition_CMDprecise = new ActuatorToPosition_CMD(mActuator_SS, mDistanceFromAprilTag.calculateangle());
 
 
 
@@ -139,8 +144,10 @@ public class RobotContainer
     driverXbox.y().whileTrue(mScoopUP_CMD);
     driverXbox.b().whileTrue(mScoopDOWN_CMD);
 
-    driverXbox.leftBumper().whileTrue(mShoot_CMD);
+  //  driverXbox.leftBumper().whileTrue(mShoot_CMD);
     driverXbox.rightBumper().whileTrue(mSuck_CMD);
+    driverXbox.a().whileTrue(mShoot_CMDautomatic);
+    driverXbox.x().whileTrue(mActuatorToPosition_CMDprecise);
 
     driverXbox.povLeft().onTrue(mActuatorCalibration_CMD);
     driverXbox.povRight().onTrue(mScoopCalibration_CMD);
@@ -153,21 +160,22 @@ public class RobotContainer
     //driverXbox.b().whileTrue(
        // Commands.deferredProxy(() -> drivebase.driveToPose(
          //                          new Pose2d(new Translation2d(4, 4), Rotation2d.fromDegrees(0)))
-           //                   ));
+ 
+  /*        //                   ));
     driverXbox.x().whileTrue(
       drivebase.driveCommand(
         () -> MathUtil.applyDeadband(alignAprilTag.ForwardAim(1, 0.85), OperatorConstants.LEFT_Y_DEADBAND),
         () ->  MathUtil.applyDeadband((aimAndCome.ForwardAim(1,0.85)), OperatorConstants.LEFT_X_DEADBAND),
         () -> AimAndAlign_SS.AimAtApril(0.1 ,0.3)));
-
-
+ */
+/*
     driverXbox.a().whileTrue(
       drivebase.driveCommand(
         () -> MathUtil.applyDeadband(driverXbox.getLeftY() , OperatorConstants.LEFT_Y_DEADBAND),
         () -> MathUtil.applyDeadband(driverXbox.getLeftX() , OperatorConstants.LEFT_X_DEADBAND),
         () -> AimAndAlign_SS.AimAtApril(0.1 ,0.3)));
-
-
+ */
+/*
       driverXbox.b().whileTrue(
        drivebase.driveCommand(
         () -> MathUtil.applyDeadband(alignAprilTag.ForwardAim(1, 0.8), OperatorConstants.LEFT_Y_DEADBAND),
@@ -179,8 +187,9 @@ public class RobotContainer
         () -> MathUtil.applyDeadband(driverXbox.getLeftY() , OperatorConstants.LEFT_Y_DEADBAND),
         () ->  MathUtil.applyDeadband((aimAndCome.ForwardAim(1,0.8)), OperatorConstants.LEFT_X_DEADBAND),
         () -> driverXbox.getRightX() * 0.8));    // driverXbox.x().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
+         */
   }
-
+ 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *
