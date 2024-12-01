@@ -10,6 +10,8 @@ import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonUtils;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -20,8 +22,16 @@ public class AimAndAlign_SS extends SubsystemBase {
   double targetYaw = 0.0;
   PhotonCamera camera = new PhotonCamera("photo2");
   double iD;
+   double kP = 0.0075;
+  double kI = 0.0;
+  double kD = 0.0;
+double posn;
+
+
+  PIDController mPidController1 = new PIDController(kP, kI, kD);
 
   public AimAndAlign_SS() {
+    
 
   
   }
@@ -29,15 +39,23 @@ public class AimAndAlign_SS extends SubsystemBase {
   public double AimAtApril(double turnKP, double maxturnspeed){
      var results = camera.getLatestResult();
 
+
      if (results.hasTargets()){
       var target = results.getBestTarget();
-      targetYaw = target.getYaw();
+        Transform3d bestcameratotarget = target.getBestCameraToTarget();
+      targetYaw = bestcameratotarget.getZ();
       targetVisible = true;
       iD = target.getFiducialId();
       }  
-    double turn = 1.0 * targetYaw * turnKP * maxturnspeed;
-    
-    return turn;
+    //double turn = 1.0 * turnKP * maxturnspeed;
+    double turn = mPidController1.calculate(targetYaw, 180);
+    if(targetYaw > 0){
+      posn = -1;
+    }else if (targetYaw < 0){
+       posn = 1;
+
+    }
+    return -turn * posn;
   }
 
   public double WhichPosition(){

@@ -29,8 +29,8 @@ public class AimAndCome extends SubsystemBase {
   double kI = 0.01;
   double kD = 0.0;
 
-  double kP2 = 1.3;
-  double kI2 = 0.01;
+  double kP2 = 2.4;
+  double kI2 = 0.05;
   double kD2 = 0.0;
 
   PIDController mPidController1 = new PIDController(kP, kI, kD);
@@ -76,12 +76,15 @@ public class AimAndCome extends SubsystemBase {
 */
       }  
     
-if (x>0.6){
-  forward = (mPidController1.calculate(x, 0.5));
 
-} else if (x>0.6){
-    forward = (mPidController2.calculate(x, 0.5));
-   }
+    if(x > 0.62){
+        forward = mPidController1.calculate(x, 0.5);
+    } else if(x < 0.62){
+        forward = mPidController2.calculate(x, 0.5);
+             System.out.println("pid2" + forward);
+
+
+    }
      System.out.println("forward:" + -forward);
      System.out.println("x" + x);
     

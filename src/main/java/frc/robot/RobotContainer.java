@@ -142,8 +142,8 @@ private final Getinthebox_AutoCMD mGetinthebox_AutoCMD = new Getinthebox_AutoCMD
  
   private void configureBindings()
   {
-  //  driverXbox.y().whileTrue(mScoopUP_CMD);
-    // driverXbox.b().whileTrue(mScoopDOWN_CMD);
+  driverXbox.a().whileTrue(mScoopUP_CMD);
+ driverXbox.b().whileTrue(mShoot_CMD);
 
   //  driverXbox.leftBumper().whileTrue(mShoot_CMD);
     driverXbox.rightBumper().whileTrue(mSuck_CMD);
@@ -151,10 +151,18 @@ private final Getinthebox_AutoCMD mGetinthebox_AutoCMD = new Getinthebox_AutoCMD
     driverXbox.x().whileTrue(mActuatorToPosition_CMDprecise);
 
 
-    driverXbox.povLeft().onTrue(mActuatorCalibration_CMD);
-    driverXbox.povRight().onTrue(mScoopCalibration_CMD);
-    driverXbox.povUp().whileTrue(mActuator_up_CMD);
-    driverXbox.povDown().whileTrue(mActuator_down_CMD);
+    driverXbox.povLeft().whileTrue(mActuator_up_CMD);
+    driverXbox.povRight().whileTrue(mActuator_down_CMD);
+    driverXbox.povUp().whileTrue(
+           drivebase.driveCommand(
+        () -> MathUtil.applyDeadband(driverXbox.getLeftY() , OperatorConstants.LEFT_Y_DEADBAND),
+        () ->  MathUtil.applyDeadband((aimAndCome.ForwardAim()), OperatorConstants.LEFT_X_DEADBAND),
+        () -> driverXbox.getRightX() * 0.8));    // driverXbox.x().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
+    
+    driverXbox.povDown().whileTrue(  drivebase.driveCommand(
+        () -> MathUtil.applyDeadband(driverXbox.getLeftY() , OperatorConstants.LEFT_Y_DEADBAND),
+        () -> MathUtil.applyDeadband(driverXbox.getLeftX() , OperatorConstants.LEFT_X_DEADBAND),
+        () -> AimAndAlign_SS.AimAtApril(0.1 ,0.3)));
 
     
     //driverXbox.a().onTrue((Commands.runOnce(drivebase::zeroGyro)));
@@ -176,7 +184,7 @@ private final Getinthebox_AutoCMD mGetinthebox_AutoCMD = new Getinthebox_AutoCMD
         () -> MathUtil.applyDeadband(driverXbox.getLeftY() , OperatorConstants.LEFT_Y_DEADBAND),
         () -> MathUtil.applyDeadband(driverXbox.getLeftX() , OperatorConstants.LEFT_X_DEADBAND),
         () -> AimAndAlign_SS.AimAtApril(0.1 ,0.3)));
- */
+ *//*
     driverXbox.a().whileTrue(mGetinthebox_AutoCMD);
       driverXbox.b().whileTrue(
        drivebase.driveCommand(
@@ -184,13 +192,14 @@ private final Getinthebox_AutoCMD mGetinthebox_AutoCMD = new Getinthebox_AutoCMD
         () -> MathUtil.applyDeadband(driverXbox.getLeftX() , OperatorConstants.LEFT_X_DEADBAND),
         () -> driverXbox.getRightX() * 0.8));    // driverXbox.x().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
       
-         
+      */     
       driverXbox.y().whileTrue(
-      drivebase.driveCommand(
-        () -> MathUtil.applyDeadband(driverXbox.getLeftY() , OperatorConstants.LEFT_Y_DEADBAND),
-        () ->  MathUtil.applyDeadband((aimAndCome.ForwardAim()), OperatorConstants.LEFT_X_DEADBAND),
+        drivebase.driveCommand(
+      
+        () -> MathUtil.applyDeadband(alignAprilTag.ForwardAim(1, 0.8), OperatorConstants.LEFT_Y_DEADBAND),
+        () -> MathUtil.applyDeadband(driverXbox.getLeftX() , OperatorConstants.LEFT_X_DEADBAND),
         () -> driverXbox.getRightX() * 0.8));    // driverXbox.x().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
-         
+    
   }
  
   /**
