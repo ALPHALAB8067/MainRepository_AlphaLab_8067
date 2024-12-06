@@ -11,30 +11,28 @@ import org.photonvision.PhotonUtils;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class AimAndAlign_SS extends SubsystemBase {
+public class AimAndAlignParallel_SS extends SubsystemBase {
   /** Creates a new AimAndAlign_SS. */
 
   boolean targetVisible = false; 
-  int targetYaw = 0;
+  double targetYaw = 0.0;
   PhotonCamera camera = new PhotonCamera("photo2");
   double iD;
-   double kP = 0.0015;
+   double kP = 0.0075;
   double kI = 0.0;
   double kD = 0.0;
 double posn;
-double rotation;
 
-
+  SwerveSubsystem mSwerveSubsystem; 
 
   PIDController mPidController1 = new PIDController(kP, kI, kD);
+  double currentAngle = mSwerveSubsystem.getHeading().getDegrees();
 
-  public AimAndAlign_SS() {
-    
+  public AimAndAlignParallel_SS() {
 
   
   }
@@ -46,24 +44,20 @@ double rotation;
      if (results.hasTargets()){
       var target = results.getBestTarget();
         Transform3d bestcameratotarget = target.getBestCameraToTarget();
-      Rotation3d rotation2 = bestcameratotarget.getRotation();
-      rotation = rotation2.getZ();
+      targetYaw = bestcameratotarget.getZ();
       targetVisible = true;
       iD = target.getFiducialId();
       }  
     //double turn = 1.0 * turnKP * maxturnspeed;
-    double turn = mPidController1.calculate(targetYaw, 180);
+    double turn = mPidController1.calculate(currentAngle, 179);
     if(targetYaw > 0){
       posn = -1;
     }else if (targetYaw < 0){
        posn = 1;
 
     }
-    double rotationturn = Math.atan(rotation);
-    double ZOOM = -0.002 * (180-rotationturn);
-    System.out.println(ZOOM);
-    return ZOOM;
-
+    return (targetYaw-180) * 0.5;
+    //return -turn * posn;
   }
 
   public double WhichPosition(){
@@ -71,6 +65,7 @@ double rotation;
 
     if (results.hasTargets()){
       var target = results.getBestTarget();
+      targetYaw = target.getYaw();
       targetVisible = true;
       iD = target.getFiducialId();
       }  

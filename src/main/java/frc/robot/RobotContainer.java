@@ -54,7 +54,7 @@ public class RobotContainer
   private final Actuator_up_CMD mActuator_up_CMD = new Actuator_up_CMD(mActuator_SS);
   private final Actuator_down_CMD mActuator_down_CMD = new Actuator_down_CMD(mActuator_SS);
   private final ActuatorCalibration_CMD mActuatorCalibration_CMD = new ActuatorCalibration_CMD(mActuator_SS);
-  private final ActuatorToPosition_CMD mActuatorToPosition_CMD = new ActuatorToPosition_CMD(mActuator_SS, 10);
+  private final ActuatorToPosition_CMD mActuatorToPosition_CMD = new ActuatorToPosition_CMD(mActuator_SS, 25);
   //position en degré
 
   private final Scoop_SS mScoop_SS = new Scoop_SS();

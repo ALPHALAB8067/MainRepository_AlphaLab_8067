@@ -25,8 +25,8 @@ public class Actuator_SS extends SubsystemBase {
 
   /** Creates a new Actuator_SS. */
   public Actuator_SS() {
-    kP = 1; 
-    kI = 0.00001;
+    kP = 0.75; 
+    kI = 0.00005;
     kD = 0; 
     kIz = 0; 
     kFF = 0; 
