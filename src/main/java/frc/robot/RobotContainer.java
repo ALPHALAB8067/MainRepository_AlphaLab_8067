@@ -16,6 +16,7 @@ import frc.robot.Constants.OperatorConstants;
 import frc.robot.automatedcommands.Getinthebox_AutoCMD;
 import frc.robot.commands.ScoopCalibration_CMD;
 import frc.robot.commands.ScoopDOWN_CMD;
+import frc.robot.commands.ScoopToArm_CMD;
 import frc.robot.commands.ScoopToPosition_CMD;
 import frc.robot.commands.ScoopUP_CMD;
 import frc.robot.commands.ActuatorCalibration_CMD;
@@ -54,15 +55,16 @@ public class RobotContainer
   private final Actuator_up_CMD mActuator_up_CMD = new Actuator_up_CMD(mActuator_SS);
   private final Actuator_down_CMD mActuator_down_CMD = new Actuator_down_CMD(mActuator_SS);
   private final ActuatorCalibration_CMD mActuatorCalibration_CMD = new ActuatorCalibration_CMD(mActuator_SS);
-  private final ActuatorToPosition_CMD mActuatorToPosition_CMD = new ActuatorToPosition_CMD(mActuator_SS, 25);
-  //position en degré
+  private final ActuatorToPosition_CMD mActuatorToPosition_CMD = new ActuatorToPosition_CMD(mActuator_SS, 25.0);
+
 
   private final Scoop_SS mScoop_SS = new Scoop_SS();
   private final ScoopCalibration_CMD mScoopCalibration_CMD = new ScoopCalibration_CMD(mScoop_SS);
   private final ScoopDOWN_CMD mScoopDOWN_CMD = new ScoopDOWN_CMD(mScoop_SS);
   private final ScoopUP_CMD mScoopUP_CMD = new ScoopUP_CMD(mScoop_SS);
-  private final ScoopToPosition_CMD mScoopToPosition_CMD = new ScoopToPosition_CMD(mScoop_SS ,0 );
-  //position a mettre en degré
+  private final ScoopToPosition_CMD mScoopToPosition_CMD = new ScoopToPosition_CMD(mScoop_SS, 30.0 );
+  private final ScoopToArm_CMD mScoopToPosition2_CMD = new ScoopToArm_CMD(mScoop_SS,mActuator_SS);
+ 
 
   private final Shooter_SS mShooter_SS = new Shooter_SS();
   private final Suck_CMD mSuck_CMD = new Suck_CMD(mShooter_SS);
@@ -142,8 +144,8 @@ private final Getinthebox_AutoCMD mGetinthebox_AutoCMD = new Getinthebox_AutoCMD
  
   private void configureBindings()
   {
-  driverXbox.a().whileTrue(mScoopUP_CMD);
- driverXbox.b().whileTrue(mShoot_CMD);
+    driverXbox.y().whileTrue(mScoopUP_CMD);
+    driverXbox.b().whileTrue(mScoopDOWN_CMD);
 
   //  driverXbox.leftBumper().whileTrue(mShoot_CMD);
     driverXbox.rightBumper().whileTrue(mSuck_CMD);
@@ -170,36 +172,15 @@ private final Getinthebox_AutoCMD mGetinthebox_AutoCMD = new Getinthebox_AutoCMD
     //driverXbox.b().whileTrue(
        // Commands.deferredProxy(() -> drivebase.driveToPose(
          //                          new Pose2d(new Translation2d(4, 4), Rotation2d.fromDegrees(0)))
- 
-  /*        //                   ));
-    driverXbox.x().whileTrue(
-      drivebase.driveCommand(
-        () -> MathUtil.applyDeadband(alignAprilTag.ForwardAim(1, 0.85), OperatorConstants.LEFT_Y_DEADBAND),
-        () ->  MathUtil.applyDeadband((aimAndCome.ForwardAim(1,0.85)), OperatorConstants.LEFT_X_DEADBAND),
-        () -> AimAndAlign_SS.AimAtApril(0.1 ,0.3)));
- */
-/*
+           //                   ));
+    driverXbox.x().whileTrue(drivebase.aimAtSpeaker(2));
+
     driverXbox.a().whileTrue(
       drivebase.driveCommand(
         () -> MathUtil.applyDeadband(driverXbox.getLeftY() , OperatorConstants.LEFT_Y_DEADBAND),
         () -> MathUtil.applyDeadband(driverXbox.getLeftX() , OperatorConstants.LEFT_X_DEADBAND),
-        () -> AimAndAlign_SS.AimAtApril(0.1 ,0.3)));
- *//*
-    driverXbox.a().whileTrue(mGetinthebox_AutoCMD);
-      driverXbox.b().whileTrue(
-       drivebase.driveCommand(
-        () -> MathUtil.applyDeadband(alignAprilTag.ForwardAim(1, 0.8), OperatorConstants.LEFT_Y_DEADBAND),
-        () -> MathUtil.applyDeadband(driverXbox.getLeftX() , OperatorConstants.LEFT_X_DEADBAND),
-        () -> driverXbox.getRightX() * 0.8));    // driverXbox.x().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
-      
-      */     
-      driverXbox.y().whileTrue(
-        drivebase.driveCommand(
-      
-        () -> MathUtil.applyDeadband(alignAprilTag.ForwardAim(1, 0.8), OperatorConstants.LEFT_Y_DEADBAND),
-        () -> MathUtil.applyDeadband(driverXbox.getLeftX() , OperatorConstants.LEFT_X_DEADBAND),
-        () -> driverXbox.getRightX() * 0.8));    // driverXbox.x().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
-    
+        () -> AimAndAlign_SS.AimAtApril(0.1 ,0.8)));
+    // driverXbox.x().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
   }
  
   /**

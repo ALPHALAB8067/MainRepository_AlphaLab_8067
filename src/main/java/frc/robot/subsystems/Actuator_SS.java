@@ -11,7 +11,6 @@ import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.SparkRelativeEncoder.Type;
 
-import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -35,8 +34,9 @@ public class Actuator_SS extends SubsystemBase {
   //motor setup
   mActuator = new CANSparkMax(23,MotorType.kBrushed); 
   
+  
   //encoder setup
-  mEncoder = mActuator.getEncoder(Type.kQuadrature, 8192);
+  mEncoder = mActuator.getEncoder(Type.kQuadrature,8192);
   mEncoder.setInverted(true);
   mEncoder.setPositionConversionFactor(240);
 
@@ -50,7 +50,7 @@ public class Actuator_SS extends SubsystemBase {
   mPIDcontroller.setIZone(kIz);
   mPIDcontroller.setOutputRange(kMinOutput,kMaxOutput);
 
-  SmartDashboard.putString("PID settings cannot be changed here",mPIDcontroller.toString());
+  System.out.println( mPIDcontroller.toString());
   }
 
   public void ActuatorCalibration(){
@@ -58,9 +58,13 @@ public class Actuator_SS extends SubsystemBase {
     //if this dosent work we could create a timer that uses the scheduler loop
     if ( mEncoder.getVelocity() == 0 ) {
       mActuator.set(0);
-      mEncoder.setPosition(0);
+
       ActuatorCalibrationDone = true;
     }
+  }
+
+  public void encoderReset(){
+    mEncoder.setPosition(0);
   }
 
   public void Actuator_up (){
@@ -79,10 +83,14 @@ public class Actuator_SS extends SubsystemBase {
     mPIDcontroller.setReference(pPosition, ControlType.kPosition);
   }
 
+  public double getPosition() {
+    return mEncoder.getPosition();
+  }
+
   @Override
   public void periodic() {
     SmartDashboard.putNumber("ActuatorEncoderValue", mEncoder.getPosition());
-    SmartDashboard.putNumber("ActuatorEncoderSeed", mEncoder.getVelocity());
+    SmartDashboard.putNumber("ActuatorEncoderSpeed", mEncoder.getVelocity());
     // This method will be called once per scheduler run
   }
 }
