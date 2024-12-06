@@ -34,6 +34,6 @@ public class ScoopDOWN_CMD extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return mScoop_SS.speed_0();
+    return false;
   }
 }

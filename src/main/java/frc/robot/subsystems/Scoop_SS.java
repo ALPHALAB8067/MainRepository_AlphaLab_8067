@@ -29,6 +29,8 @@ public class Scoop_SS extends SubsystemBase {
   //Need to check, either 2048 or 8192
   final double gearRatio = 10;
   final double tickPerDegree = 40960 / 360;
+  public boolean mDONTSTOPINSTANTLY;
+  public boolean mSTOP = false;
 
   public Scoop_SS() {
     mLimitSwitch = new DigitalInput(9);
@@ -44,8 +46,8 @@ public class Scoop_SS extends SubsystemBase {
     mScoopMotor.configAllowableClosedloopError(0,0 );
     //mScoopMotor.getSensorCollection();
 		mScoopMotor.selectProfileSlot(0, 0);
-		mScoopMotor.config_kP(0, 0.2, 30);
-    SmartDashboard.putNumber("kP",0.2);
+		mScoopMotor.config_kP(0, 0.35, 30);
+    SmartDashboard.putNumber("kP",0.35);
 		mScoopMotor.config_kI(0, 0.0000, 30);
     SmartDashboard.putNumber("kI",0.0000);
 		mScoopMotor.config_kD(0, 0, 30);
@@ -89,10 +91,21 @@ public class Scoop_SS extends SubsystemBase {
     mScoopMotor.set(ControlMode.PercentOutput,0.7);
   }
   public void scoopMedium(){
-    mScoopMotor.set(ControlMode.PercentOutput,0.15);
-    if (speed_0()) {
+
+    mScoopMotor.set(ControlMode.PercentOutput,0.2);
+    /*if (mScoopMotor.getSelectedSensorVelocity() == 0) {
       mScoopMotor.set(ControlMode.PercentOutput, 0);
+      if(mDONTSTOPINSTANTLY==true){
+        mDONTSTOPINSTANTLY= false;
+        mSTOP = true;
+      }
     }
+    else {
+      mScoopMotor.set(ControlMode.PercentOutput,0.15);
+      mDONTSTOPINSTANTLY = true;
+      
+    }*/
+    
   }
 
   public void scoopDOWN(){

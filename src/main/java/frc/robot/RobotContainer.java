@@ -131,8 +131,8 @@ public class RobotContainer
  
   private void configureBindings()
   {
-    driverXbox.y().whileTrue(mScoopToPosition_CMD);
-    driverXbox.b().whileTrue(mScoopDOWN_CMD);
+    driverXbox.y().whileTrue(mScoopDOWN_CMD);
+    driverXbox.b().whileTrue(mScoopToPosition_CMD);
 
     driverXbox.leftBumper().whileTrue(mShoot_CMD);
     driverXbox.rightBumper().whileTrue(mSuck_CMD);
@@ -149,13 +149,17 @@ public class RobotContainer
        // Commands.deferredProxy(() -> drivebase.driveToPose(
          //                          new Pose2d(new Translation2d(4, 4), Rotation2d.fromDegrees(0)))
            //                   ));
-    driverXbox.x().whileTrue(drivebase.aimAtSpeaker(2));
+    //driverXbox.x().whileTrue(drivebase.aimAtSpeaker(2));
 
+    /*
     driverXbox.a().whileTrue(
       drivebase.driveCommand(
         () -> MathUtil.applyDeadband(driverXbox.getLeftY() , OperatorConstants.LEFT_Y_DEADBAND),
         () -> MathUtil.applyDeadband(driverXbox.getLeftX() , OperatorConstants.LEFT_X_DEADBAND),
         () -> AimAndAlign_SS.AimAtApril(0.1 ,0.8)));
+
+     */
+
     // driverXbox.x().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
   }
 
