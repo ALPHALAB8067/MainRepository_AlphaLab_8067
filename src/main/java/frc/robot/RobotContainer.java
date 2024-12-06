@@ -132,7 +132,7 @@ public class RobotContainer
   private void configureBindings()
   {
     driverXbox.y().whileTrue(mScoopDOWN_CMD);
-    driverXbox.b().whileTrue(mScoopToPosition_CMD);
+    driverXbox.b().whileTrue(mScoopToPosition2_CMD);
 
     driverXbox.leftBumper().whileTrue(mShoot_CMD);
     driverXbox.rightBumper().whileTrue(mSuck_CMD);

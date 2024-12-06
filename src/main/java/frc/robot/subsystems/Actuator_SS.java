@@ -34,6 +34,7 @@ public class Actuator_SS extends SubsystemBase {
   //motor setup
   mActuator = new CANSparkMax(23,MotorType.kBrushed); 
   
+  
   //encoder setup
   mEncoder = mActuator.getEncoder(Type.kQuadrature,8192);
   mEncoder.setInverted(true);
@@ -57,9 +58,13 @@ public class Actuator_SS extends SubsystemBase {
     //if this dosent work we could create a timer that uses the scheduler loop
     if ( mEncoder.getVelocity() == 0 ) {
       mActuator.set(0);
-      mEncoder.setPosition(0);
+
       ActuatorCalibrationDone = true;
     }
+  }
+
+  public void encoderReset(){
+    mEncoder.setPosition(0);
   }
 
   public void Actuator_up (){

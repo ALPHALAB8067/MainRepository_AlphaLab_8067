@@ -32,8 +32,14 @@ public class Scoop_SS extends SubsystemBase {
   public boolean mDONTSTOPINSTANTLY;
   public boolean mSTOP = false;
 
+  double kMeasuredPosHorizontal = 30 * tickPerDegree ; //Position measured when arm is horizontal
+  double currentPos ;
+  double degrees;
+  double radians ;
+  double cosineScalar ;
+
   public Scoop_SS() {
-    mLimitSwitch = new DigitalInput(9);
+    mLimitSwitch = new DigitalInput(0);
     mScoopMotor = new TalonSRX(24);
     //set factory default and set basic parameter (not nescessary)
     mScoopMotor.configFactoryDefault();
@@ -53,7 +59,7 @@ public class Scoop_SS extends SubsystemBase {
 		mScoopMotor.config_kD(0, 0, 30);
     SmartDashboard.putNumber("kD",0);
     mScoopMotor.config_kF(0, 0, 30);
-    mScoopMotor.configClosedLoopPeakOutput(0,0.6);
+    mScoopMotor.configClosedLoopPeakOutput(0,0.8);
   }
 
   public void ScoopCalibration (){
@@ -70,18 +76,17 @@ public class Scoop_SS extends SubsystemBase {
   }
   
   public void gotoPosition(Double pPosition){
-     
+    currentPos = mScoopMotor.getSelectedSensorPosition();
+    degrees = (currentPos - kMeasuredPosHorizontal) / tickPerDegree;
+    radians = java.lang.Math.toRadians(degrees);
+    cosineScalar = java.lang.Math.cos(radians);
+    SmartDashboard.putNumber("cosine",cosineScalar);
     SmartDashboard.putNumber("wanted Scoop position",pPosition);
-    mScoopMotor.set(ControlMode.Position, pPosition * tickPerDegree);
+    mScoopMotor.set(ControlMode.Position, pPosition * tickPerDegree,DemandType.ArbitraryFeedForward,0.50*cosineScalar);
     //mScoopMotor.set(ControlMode.Position, 30 * tickPerDegree);
 
   }
 
-  public void limitSwitch() {
-    if (mLimitSwitch.get()){
-      mScoopMotor.set(ControlMode.PercentOutput, 0); 
-    } 
-  }
 
   public boolean speed_0(){
    return mScoopMotor.getSelectedSensorVelocity()== 0;
@@ -92,7 +97,8 @@ public class Scoop_SS extends SubsystemBase {
   }
   public void scoopMedium(){
 
-    mScoopMotor.set(ControlMode.PercentOutput,0.2);
+    mScoopMotor.set(ControlMode.PercentOutput,0.35);
+  
     /*if (mScoopMotor.getSelectedSensorVelocity() == 0) {
       mScoopMotor.set(ControlMode.PercentOutput, 0);
       if(mDONTSTOPINSTANTLY==true){
