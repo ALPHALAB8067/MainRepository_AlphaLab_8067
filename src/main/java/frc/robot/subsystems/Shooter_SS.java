@@ -54,13 +54,23 @@ mRelativeEncoderRight = mRightMotorMaster.getEncoder();
     mPidcontrollerleft.setFeedbackDevice(mRelativeEncoderLeft);
     mPidcontrollerleft.setP(0.0001);
     mPidcontrollerleft.setI(0.000001);
+    mPidcontrollerleft.setD(0);
 
      mPidcontrollerright = mRightMotorMaster.getPIDController();
     mPidcontrollerright.setFeedbackDevice(mRelativeEncoderRight);
     mPidcontrollerright.setP(0.0001);
     mPidcontrollerright.setI(0.000001);
+    mPidcontrollerright.setD(0);
   
-
+    SmartDashboard.putNumber("ShootLeft P", mPidcontrollerleft.getP());
+    SmartDashboard.putNumber("ShootLeft I", mPidcontrollerleft.getI());
+    SmartDashboard.putNumber("ShootLeft D", mPidcontrollerleft.getD());
+    SmartDashboard.putNumber("velocity left",0);
+      
+    SmartDashboard.putNumber("ShootRight P", mPidcontrollerright.getP());
+    SmartDashboard.putNumber("ShootRight I", mPidcontrollerright.getI());
+    SmartDashboard.putNumber("ShootRight D", mPidcontrollerright.getD());
+    SmartDashboard.putNumber("velocity right",0);
   }
 
   public void shoot() {
@@ -77,8 +87,8 @@ mRelativeEncoderRight = mRightMotorMaster.getEncoder();
   }
 
   public void PidSpeed(double velocityleft, double velocityright){ 
-    mPidcontrollerleft.setReference(velocityleft, ControlType.kVelocity);
-    mPidcontrollerright.setReference(velocityright, ControlType.kVelocity);
+    mPidcontrollerleft.setReference(SmartDashboard.getNumber("velocity left", 0), ControlType.kVelocity);
+    mPidcontrollerright.setReference(SmartDashboard.getNumber("velocity right", 0), ControlType.kVelocity);
 
 
   }

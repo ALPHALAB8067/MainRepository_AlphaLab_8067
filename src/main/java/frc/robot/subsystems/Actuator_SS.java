@@ -49,18 +49,12 @@ public class Actuator_SS extends SubsystemBase {
   mPIDcontroller.setFF(kFF);
   mPIDcontroller.setIZone(kIz);
   mPIDcontroller.setOutputRange(kMinOutput,kMaxOutput);
+  
+  SmartDashboard.putNumber("actuator setpoint",25);
+  SmartDashboard.putNumber("Actuator P",1);
+  SmartDashboard.putNumber("Actuator I",0.000001 );
+  SmartDashboard.putNumber("Actuator D", 0);
 
-  System.out.println( mPIDcontroller.toString());
-  }
-
-  public void ActuatorCalibration(){
-    mActuator.set(-1);
-    //if this dosent work we could create a timer that uses the scheduler loop
-    if ( mEncoder.getVelocity() == 0 ) {
-      mActuator.set(0);
-
-      ActuatorCalibrationDone = true;
-    }
   }
 
   public void encoderReset(){
@@ -87,8 +81,15 @@ public class Actuator_SS extends SubsystemBase {
     return mEncoder.getPosition();
   }
 
+  public void gotopositionfromdashboard(){
+    mPIDcontroller.setReference(SmartDashboard.getNumber("actuator setpoint", 25),ControlType.kPosition);
+  }
+
   @Override
   public void periodic() {
+    mPIDcontroller.setP(SmartDashboard.getNumber("Actuator P",1));
+    mPIDcontroller.setI(SmartDashboard.getNumber("Actuator I",0.000001 ));
+    mPIDcontroller.setD(SmartDashboard.getNumber("Actuator D", 0));
     SmartDashboard.putNumber("ActuatorEncoderValue", mEncoder.getPosition());
     SmartDashboard.putNumber("ActuatorEncoderSpeed", mEncoder.getVelocity());
     // This method will be called once per scheduler run

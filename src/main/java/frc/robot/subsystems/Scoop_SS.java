@@ -37,7 +37,9 @@ public class Scoop_SS extends SubsystemBase {
   double degrees;
   double radians ;
   double cosineScalar ;
-
+  Double kP;
+  Double kI;
+  Double kD;
   public Scoop_SS() {
     mLimitSwitch = new DigitalInput(0);
     mScoopMotor = new TalonSRX(24);
@@ -48,18 +50,17 @@ public class Scoop_SS extends SubsystemBase {
     mScoopMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative,0,30);
     //to use if forward on the motor is not equal to forward on sensor
     mScoopMotor.setSensorPhase(true);
-    //mScoopMotor.configNeutralDeadband(0.04);
     mScoopMotor.configAllowableClosedloopError(0,0 );
-    //mScoopMotor.getSensorCollection();
+    
 		mScoopMotor.selectProfileSlot(0, 0);
-		mScoopMotor.config_kP(0, 0.35, 30);
-    SmartDashboard.putNumber("kP",0.35);
-		mScoopMotor.config_kI(0, 0.0000, 30);
-    SmartDashboard.putNumber("kI",0.0000);
+		mScoopMotor.config_kP(0, 0.6, 30);
+    SmartDashboard.putNumber("kP",0.6);
+		mScoopMotor.config_kI(0, 0.0001, 30);
+    SmartDashboard.putNumber("kI",0.0001);
 		mScoopMotor.config_kD(0, 0, 30);
-    SmartDashboard.putNumber("kD",0);
+    SmartDashboard.putNumber("kD",kD);
     mScoopMotor.config_kF(0, 0, 30);
-    mScoopMotor.configClosedLoopPeakOutput(0,0.8);
+    mScoopMotor.configClosedLoopPeakOutput(0,1);
   }
 
   public void ScoopCalibration (){
@@ -98,27 +99,13 @@ public class Scoop_SS extends SubsystemBase {
   public void scoopMedium(){
 
     mScoopMotor.set(ControlMode.PercentOutput,0.35);
-  
-    /*if (mScoopMotor.getSelectedSensorVelocity() == 0) {
-      mScoopMotor.set(ControlMode.PercentOutput, 0);
-      if(mDONTSTOPINSTANTLY==true){
-        mDONTSTOPINSTANTLY= false;
-        mSTOP = true;
-      }
-    }
-    else {
-      mScoopMotor.set(ControlMode.PercentOutput,15);
-      mDONTSTOPINSTANTLY = true;
-      
-    }*/
-    
   }
 
   public void scoopDOWN(){
     mScoopMotor.set(ControlMode.PercentOutput,0);
   }
   
-  public double GetencoderInDegrees() {
+  public double getEncoderInDegrees() {
     return mScoopMotor.getSelectedSensorPosition()/ tickPerDegree;
   }
 
@@ -128,35 +115,19 @@ public class Scoop_SS extends SubsystemBase {
   }
   
   
-
-  /* 
-  //im going to change this bs
-  public double getOutputForTelemetry() {
-    double actualAngle = getScoopAngle();
-    double targetAngle = 45;
-    //double outputforTelemetry = mPidController.calculate(actualAngle, targetAngle);
-    //return outputforTelemetry;
-
-    //TO CHANGE LATER
-    return 0;
-  }
-  */
-  
   public double getEncodervalue(){
     return mScoopMotor.getSelectedSensorPosition();
   }
   @Override
   public void periodic() {
 
-    mScoopMotor.config_kP(0, SmartDashboard.getNumber("kP",0), 30);
-		mScoopMotor.config_kI(0, SmartDashboard.getNumber("kI",0), 30);
+    mScoopMotor.config_kP(0, SmartDashboard.getNumber("kP",0.6), 30);
+		mScoopMotor.config_kI(0, SmartDashboard.getNumber("kI",0.0001), 30);
 		mScoopMotor.config_kD(0,SmartDashboard.getNumber("kD",0), 30);
 
   
-    SmartDashboard.putBoolean("Scoop Limit switch", mLimitSwitch.get());
     SmartDashboard.putNumber("scoop encoder Value", getEncodervalue()); 
-    SmartDashboard.putNumber("Actual Angle", GetencoderInDegrees());  
-    SmartDashboard.putBoolean("ScoopSpeed 0", speed_0());
+    SmartDashboard.putNumber("Actual Angle", getEncoderInDegrees());  
     SmartDashboard.putNumber("Scoop Speed", mScoopMotor.getSelectedSensorVelocity());
     SmartDashboard.putNumber("Degrees per tick", tickPerDegree);
     SmartDashboard.putNumber("Scoop output",mScoopMotor.getMotorOutputPercent());

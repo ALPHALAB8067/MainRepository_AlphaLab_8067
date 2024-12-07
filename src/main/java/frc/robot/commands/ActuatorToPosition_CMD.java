@@ -26,7 +26,7 @@ public class ActuatorToPosition_CMD extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    mActuator_SS.gotoPosition(mPosition);
+    mActuator_SS.gotopositionfromdashboard();
   }
 
   // Called once the command ends or is interrupted.
