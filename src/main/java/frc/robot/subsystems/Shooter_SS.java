@@ -110,8 +110,7 @@ mRelativeEncoderRight = mRightMotorMaster.getEncoder();
 
   @Override
   public void periodic() {
-    SmartDashboard.getNumber("velocity left", getVelocityLeft());
-    SmartDashboard.getNumber("velocity right", getVelocityRight());
+    
     // This method will be called once per scheduler run
   }
 }

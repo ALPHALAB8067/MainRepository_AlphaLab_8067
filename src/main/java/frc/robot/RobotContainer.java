@@ -144,11 +144,11 @@ private final Getinthebox_AutoCMD mGetinthebox_AutoCMD = new Getinthebox_AutoCMD
  
   private void configureBindings()
   {
-    driverXbox.y().whileTrue(mScoopUP_CMD);
+    driverXbox.y().whileTrue(mScoopToPosition_CMD);
     driverXbox.b().whileTrue(mScoopDOWN_CMD);
 
   //  driverXbox.leftBumper().whileTrue(mShoot_CMD);
-    driverXbox.rightBumper().whileTrue(mSuck_CMD);
+    driverXbox.rightBumper().whileTrue(mScoopToPosition2_CMD);
     // driverXbox.a().whileTrue(mShoot_CMDautomatic);
     driverXbox.x().whileTrue(mActuatorToPosition_CMDprecise);
 
