@@ -2,21 +2,19 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands.swervedrive;
+package frc.robot.commands;
 
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.subsystems.swervedrive.AimAndAlign_SS;
 import frc.robot.subsystems.swervedrive.DistanceFromAprilTag;
 
-public class distance extends Command {
+public class ID_CMD extends Command {
 
   private final DistanceFromAprilTag mDistanceFromAprilTag;
-
   /** Creates a new AimAtTarget_CMD. */
-  public distance(DistanceFromAprilTag pDistanceFromAprilTag) {
+  public ID_CMD(DistanceFromAprilTag pDistanceFromAprilTag) {
     mDistanceFromAprilTag = pDistanceFromAprilTag;
     addRequirements(mDistanceFromAprilTag);
   }
@@ -30,7 +28,8 @@ public class distance extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    SmartDashboard.putNumber("Distance", mDistanceFromAprilTag.metersfromapriltagx());
+    mDistanceFromAprilTag.iD();
+
   }
 
   // Called once the command ends or is interrupted.

@@ -14,6 +14,8 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
+import frc.robot.subsystems.swervedrive.DistanceFromAprilTag;
 
 public class Shooter_SS extends SubsystemBase {
 
@@ -26,6 +28,8 @@ public class Shooter_SS extends SubsystemBase {
   private final RelativeEncoder mRelativeEncoderRight;
   private final SparkPIDController mPidcontrollerleft; 
     private final SparkPIDController mPidcontrollerright; 
+
+    private final DistanceFromAprilTag mDistanceFromAprilTag = new DistanceFromAprilTag();
 
   /** Creates a new Shooter_SS. */
   public Shooter_SS() {
@@ -78,8 +82,42 @@ mRelativeEncoderRight = mRightMotorMaster.getEncoder();
   }
   
   public void shootauto(double speed) {
-    mLeftMotorMaster.set(speed);
-    mRightMotorMaster.set(speed);
+    
+    }
+
+
+  public double rightvelocity(){
+    switch (mDistanceFromAprilTag.iD()) {
+        case 1:
+            return Constants.PositionVelocities.RightVelocity1;
+        case 2:
+            return Constants.PositionVelocities.RightVelocity2;
+        case 3:
+            return Constants.PositionVelocities.RightVelocity3;
+        case 4:
+            return Constants.PositionVelocities.RightVelocity4;
+        case 5:
+            return Constants.PositionVelocities.RightVelocity5;
+        default:
+            return 0.0;
+    }
+  }
+
+  public double leftvelocity(){
+    switch (mDistanceFromAprilTag.iD()) {
+        case 1:
+            return Constants.PositionVelocities.LeftVelocity1;
+        case 2:
+            return Constants.PositionVelocities.LeftVelocity2;
+        case 3:
+            return Constants.PositionVelocities.LeftVelocity3;
+        case 4:
+            return Constants.PositionVelocities.LeftVelocity4;
+        case 5:
+            return Constants.PositionVelocities.LeftVelocity5;
+        default:
+            return 0.0;
+    }
   }
 
   public double getVelocityLeft(){
@@ -89,6 +127,13 @@ mRelativeEncoderRight = mRightMotorMaster.getEncoder();
   public void PidSpeed(double velocityleft, double velocityright){ 
     mPidcontrollerleft.setReference(SmartDashboard.getNumber("velocity left", 0), ControlType.kVelocity);
     mPidcontrollerright.setReference(SmartDashboard.getNumber("velocity right", 0), ControlType.kVelocity);
+
+
+  }
+
+    public void PidSpeedset(double velocityleft, double velocityright){ 
+    mPidcontrollerleft.setReference(velocityleft, ControlType.kVelocity);
+    mPidcontrollerright.setReference(velocityright, ControlType.kVelocity);
 
 
   }
@@ -114,4 +159,5 @@ mRelativeEncoderRight = mRightMotorMaster.getEncoder();
     SmartDashboard.getNumber("velocity right", getVelocityRight());
     // This method will be called once per scheduler run
   }
-}
+  }
+

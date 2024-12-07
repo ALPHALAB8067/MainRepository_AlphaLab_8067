@@ -13,6 +13,8 @@ import com.revrobotics.SparkRelativeEncoder.Type;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
+import frc.robot.subsystems.swervedrive.DistanceFromAprilTag;
 
 public class Actuator_SS extends SubsystemBase {
 
@@ -21,6 +23,7 @@ public class Actuator_SS extends SubsystemBase {
   public double kP, kI, kD, kIz, kFF, kMaxOutput, kMinOutput;
   private final SparkPIDController mPIDcontroller;
   public boolean ActuatorCalibrationDone = false;
+    private final DistanceFromAprilTag mDistanceFromAprilTag = new DistanceFromAprilTag();
 
   /** Creates a new Actuator_SS. */
   public Actuator_SS() {
@@ -72,6 +75,23 @@ public class Actuator_SS extends SubsystemBase {
     mActuator.set(0);
   }
 
+
+  public double Angletogo(){
+    switch (mDistanceFromAprilTag.iD()) {
+        case 1:
+            return Constants.PositionAngles.Angle1;
+        case 2:
+            return Constants.PositionAngles.Angle2;
+        case 3:
+            return Constants.PositionAngles.Angle3;
+        case 4:
+            return Constants.PositionAngles.Angle4;
+        case 5:
+            return Constants.PositionAngles.Angle5;
+        default:
+            return 25;
+    }
+  }
   public void gotoPosition(double pPosition){
     SmartDashboard.putNumber("wanted Actuator position", pPosition);
     mPIDcontroller.setReference(pPosition, ControlType.kPosition);

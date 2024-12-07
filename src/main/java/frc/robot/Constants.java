@@ -50,4 +50,54 @@ public final class Constants
     public static final double RIGHT_X_DEADBAND = 0.1;
     public static final double TURN_CONSTANT    = 6;
   }
+  public static final class PositionVelocities
+  {
+    //1
+    public static  final double RightVelocity1 = 5000; 
+    public static final double LeftVelocity1 = RightVelocity1 - 600;
+
+    //2 
+
+    public static final double RightVelocity2 = 5000; 
+    public static final double LeftVelocity2 = RightVelocity1 - 600;
+
+    //3
+
+    public static final double RightVelocity3 = 5000; 
+    public static final double LeftVelocity3 = RightVelocity1 - 600;
+
+    //4
+
+    public static final double RightVelocity4 = 5000; 
+    public static final double LeftVelocity4 = RightVelocity1 - 600;
+
+    //5
+
+    public static final double RightVelocity5 = 5000; 
+    public static final double LeftVelocity5 = RightVelocity1 - 600;
+
+    // Hold time on motor brakes when disabled
+    public static final double WHEEL_LOCK_TIME = 10; // seconds
+  }
+
+  public static final class PositionAngles
+  {
+    //1
+    public static  final double Angle1 = 26; 
+
+    //2 
+
+    public static final double Angle2 = 26; 
+
+    //3
+
+    public static final double Angle3 = 25;
+
+    //4
+
+    public static final double Angle4 = 26; 
+    //5 
+    
+    public static final double Angle5 = 26;
+}
 }

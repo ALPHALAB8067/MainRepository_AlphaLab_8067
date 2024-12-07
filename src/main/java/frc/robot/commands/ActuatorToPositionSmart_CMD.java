@@ -5,16 +5,18 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.Shooter_SS;
+import frc.robot.subsystems.Actuator_SS;
 
-public class Shoot_CMD extends Command {
-  /** Creates a new Shoot_CMD. */
-
-  private final Shooter_SS mShooter_SS;
-
-  public Shoot_CMD(Shooter_SS pShooter_SS) {
+public class ActuatorToPositionSmart_CMD extends Command {
+  /** Creates a new ActuatorToPosition_CMD. */
+  Actuator_SS mActuator_SS;
+  double mPosition;
+  public ActuatorToPositionSmart_CMD(Actuator_SS pActuator_SS, double Position) {
     // Use addRequirements() here to declare subsystem dependencies.
-    mShooter_SS = pShooter_SS;
+    mActuator_SS = pActuator_SS;
+    mPosition = Position;
+
+    
   }
 
   // Called when the command is initially scheduled.
@@ -24,16 +26,12 @@ public class Shoot_CMD extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-
-    
-    mShooter_SS.PidSpeedset(mShooter_SS.leftvelocity(), mShooter_SS.rightvelocity());
+    mActuator_SS.gotopositionfromdashboard();
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
-    mShooter_SS.stop();
-  }
+  public void end(boolean interrupted) {}
 
   // Returns true when the command should end.
   @Override

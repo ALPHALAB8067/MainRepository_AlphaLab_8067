@@ -7,12 +7,12 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Shooter_SS;
 
-public class Shoot_CMD extends Command {
+public class ShootStop_CMD extends Command {
   /** Creates a new Shoot_CMD. */
 
   private final Shooter_SS mShooter_SS;
 
-  public Shoot_CMD(Shooter_SS pShooter_SS) {
+  public ShootStop_CMD(Shooter_SS pShooter_SS) {
     // Use addRequirements() here to declare subsystem dependencies.
     mShooter_SS = pShooter_SS;
   }
@@ -24,9 +24,8 @@ public class Shoot_CMD extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-
     
-    mShooter_SS.PidSpeedset(mShooter_SS.leftvelocity(), mShooter_SS.rightvelocity());
+    mShooter_SS.stop();
   }
 
   // Called once the command ends or is interrupted.

@@ -61,7 +61,6 @@ double rotation;
     }
     double rotationturn = Math.atan(rotation);
     double ZOOM = -0.002 * (180-rotationturn);
-    System.out.println(ZOOM);
     return ZOOM;
 
   }
@@ -77,11 +76,30 @@ double rotation;
     return iD;
     }
       
+    public boolean z(){
+ var results = camera.getLatestResult();
 
+     if (results.hasTargets()){
+      var target = results.getBestTarget();
+        Transform3d bestcameratotarget = target.getBestCameraToTarget();
+      Rotation3d rotation2 = bestcameratotarget.getRotation();
+      rotation = rotation2.getZ();
+
+    }
+    double rotationturn = Math.atan(rotation);
+      
+    if(rotationturn > 179){
+      return true;
+    }else if (rotationturn < -179){
+      return true;
+    } else{
+      return false;
+    }
+    }
   @Override 
   public void periodic() {
     SmartDashboard.putNumber("Position", WhichPosition());
-    SmartDashboard.putBoolean("Icanseeyou", camera.getLatestResult().hasTargets());
+    SmartDashboard.putBoolean("z", z());
     // This method will be called once per scheduler run
   }
 
