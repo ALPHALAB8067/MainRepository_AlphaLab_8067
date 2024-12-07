@@ -30,7 +30,6 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Config;
 import frc.robot.Constants;
 import frc.robot.Constants.AutonConstants;
 import frc.robot.subsystems.Actuator_SS;
-import frc.robot.subsystems.Scoop_SS;
 
 import java.io.File;
 import java.util.function.DoubleSupplier;

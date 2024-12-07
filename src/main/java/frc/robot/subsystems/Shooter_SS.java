@@ -155,7 +155,19 @@ mRelativeEncoderRight = mRightMotorMaster.getEncoder();
 
   @Override
   public void periodic() {
-    
+    /* */
+    mPidcontrollerright.setP(SmartDashboard.getNumber("ShootRight P", 0));
+    mPidcontrollerright.setI(SmartDashboard.getNumber("ShootRight I", 0));
+    mPidcontrollerright.setD(SmartDashboard.getNumber("ShootRight D", 0));
+
+    mPidcontrollerleft.setP(SmartDashboard.getNumber("ShootLeft P", 0));
+    mPidcontrollerleft.setI(SmartDashboard.getNumber("ShootLeft I", 0));
+    mPidcontrollerleft.setD(SmartDashboard.getNumber("ShootLeft D", 0));
+
+    SmartDashboard.putNumber("current velocity right",getVelocityRight());
+    SmartDashboard.putNumber("current velocity left",getVelocityLeft());
+  
+
     // This method will be called once per scheduler run
   }
   }

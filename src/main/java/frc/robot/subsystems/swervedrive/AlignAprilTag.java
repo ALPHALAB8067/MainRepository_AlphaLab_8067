@@ -25,12 +25,12 @@ public class AlignAprilTag extends SubsystemBase {
   double forward;
   double y;
 
-  double kP = 1;
+  double kP = 0.9;
   double kI = 0.05;
   double kD = 0.0;
 
-  double kP2 = 2.4;
-  double kI2 = 0.05;
+  double kP2 = 2.7;
+  double kI2 = 0.075;
   double kD2 = 0.0;
 
   PIDController mPidController1 = new PIDController(kP, kI, kD);
@@ -59,9 +59,9 @@ public class AlignAprilTag extends SubsystemBase {
     // forward = y * turnKP * -maxforwardspeed;
    // forward = (mPidController1.calculate(y, 0));
 
-    if(y > 0.62){
+    if(y > 0.12 || y < -0.12){
       forward = mPidController1.calculate(y, 0);
-  } else if(y < 0.62){
+  } else if(y < 0.12 || y > -0.12){
       forward = mPidController2.calculate(y, 0);
            System.out.println("pid2" + forward);
 }

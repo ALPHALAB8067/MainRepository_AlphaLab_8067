@@ -96,7 +96,7 @@ public class Scoop_SS extends SubsystemBase {
   }
 
   public void scoopUP(){
-    mScoopMotor.set(ControlMode.PercentOutput,0.7);
+    mScoopMotor.set(ControlMode.PercentOutput,0.9);
   }
   public void scoopMedium(){
 

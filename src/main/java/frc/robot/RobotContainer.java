@@ -13,17 +13,21 @@ import frc.robot.commands.ActuatorCalibration_CMD;
 import frc.robot.commands.ActuatorToPositionSmart_CMD;
 import frc.robot.commands.Actuator_down_CMD;
 import frc.robot.commands.Actuator_up_CMD;
+/*c
+
 import frc.robot.commands.ScoopCalibration_CMD;
 import frc.robot.commands.ScoopDOWN_CMD;
 import frc.robot.commands.ScoopToArm_CMD;
 import frc.robot.commands.ScoopToPosition_CMD;
 import frc.robot.commands.ScoopUP_CMD;
+ */
+import frc.robot.commands.ShootSmart_CMD;
 import frc.robot.commands.ShootStop_CMD;
 import frc.robot.commands.Shoot_CMD;
 import frc.robot.commands.Shoot_CMDautomatic;
 import frc.robot.commands.swervedrive.drivebase.AbsoluteDriveAdv;
 import frc.robot.subsystems.Actuator_SS;
-import frc.robot.subsystems.Scoop_SS;
+//import frc.robot.subsystems.Scoop_SS;
 import frc.robot.subsystems.Shooter_SS;
 import frc.robot.subsystems.swervedrive.AimAndAlign_SS;
 import frc.robot.subsystems.swervedrive.AimAndCome;
@@ -60,6 +64,7 @@ public class RobotContainer
   private final ActuatorToPositionSmart_CMD mActuatorToPosition_CMD = new ActuatorToPositionSmart_CMD(mActuator_SS, 25.0);
 
   // Scoop Subsytem 
+  /*
   private final Scoop_SS mScoop_SS = new Scoop_SS();
 
   // Scoop Commands
@@ -68,7 +73,7 @@ public class RobotContainer
   private final ScoopUP_CMD mScoopUP_CMD = new ScoopUP_CMD(mScoop_SS);
   private final ScoopToPosition_CMD mScoopToPosition_CMD = new ScoopToPosition_CMD(mScoop_SS, 30.0 );
   private final ScoopToArm_CMD mScoopToPosition2_CMD = new ScoopToArm_CMD(mScoop_SS,mActuator_SS);
- 
+  */
   // Shooter Subsytem
   private final Shooter_SS mShooter_SS = new Shooter_SS();
 
@@ -76,6 +81,7 @@ public class RobotContainer
     private final Shoot_CMD mShoot_CMD = new Shoot_CMD(mShooter_SS);
     private final Shoot_CMDautomatic mShoot_CMDautomatic = new Shoot_CMDautomatic(mShooter_SS, mDistanceFromAprilTag.motor());
     private final ShootStop_CMD mShootStop_CMD = new ShootStop_CMD(mShooter_SS);
+    private final ShootSmart_CMD mShootSmart_CMD = new ShootSmart_CMD(mShooter_SS);
 
   public RobotContainer()
   {
@@ -120,9 +126,9 @@ public class RobotContainer
     // right stick controls the angular velocity of the robot
 
     Command driveFieldOrientedAnglularVelocity = drivebase.driveCommand(
-        () -> MathUtil.applyDeadband(driverXbox.getLeftY() , OperatorConstants.LEFT_Y_DEADBAND),
-        () -> MathUtil.applyDeadband(driverXbox.getLeftX() , OperatorConstants.LEFT_X_DEADBAND),
-        () -> driverXbox.getRightX() * 0.8);
+        () -> MathUtil.applyDeadband(driverXbox.getLeftX() *0.4 , OperatorConstants.LEFT_Y_DEADBAND),
+        () -> MathUtil.applyDeadband(driverXbox.getLeftY() *-0.4, OperatorConstants.LEFT_X_DEADBAND),
+        () -> driverXbox.getRightX() * 0.6);
 
     Command driveFieldOrientedDirectAngleSim = drivebase.simDriveCommand(
         () -> MathUtil.applyDeadband(driverXbox.getLeftY(), OperatorConstants.LEFT_Y_DEADBAND),
@@ -146,9 +152,9 @@ public class RobotContainer
 
 
     driverXbox.povDown().whileTrue(  drivebase.driveCommand(
-        () -> MathUtil.applyDeadband(driverXbox.getLeftY() , OperatorConstants.LEFT_Y_DEADBAND),
-        () -> MathUtil.applyDeadband(driverXbox.getLeftX() , OperatorConstants.LEFT_X_DEADBAND),
-        () -> AimAndAlign_SS.AimAtApril(0.1 ,0.3)));
+      () -> MathUtil.applyDeadband(alignAprilTag.ForwardAim(1, 0.85), OperatorConstants.LEFT_Y_DEADBAND),
+      () -> MathUtil.applyDeadband(driverXbox.getLeftX() , OperatorConstants.LEFT_X_DEADBAND),
+      () -> driverXbox.getRightX() * 0.8));
 
     // Orientation Commands
 
@@ -156,48 +162,41 @@ public class RobotContainer
       drivebase.driveCommand(
         () -> MathUtil.applyDeadband(driverXbox.getLeftY() , OperatorConstants.LEFT_Y_DEADBAND),
         () -> MathUtil.applyDeadband(driverXbox.getLeftX() , OperatorConstants.LEFT_X_DEADBAND),
-        () -> 0.2));
+        () -> -0.27));
 
      driverXbox.povRight().whileTrue(
       drivebase.driveCommand(
         () -> MathUtil.applyDeadband(driverXbox.getLeftY() , OperatorConstants.LEFT_Y_DEADBAND),
         () -> MathUtil.applyDeadband(driverXbox.getLeftX() , OperatorConstants.LEFT_X_DEADBAND),
-        () -> 0.2));
+        () -> 0.27));
   
     // Start Shooter
 
-    driverXbox.y().onTrue(mShoot_CMD);
+    driverXbox.y().whileTrue(mShoot_CMD);
 
     // Stop Shooter
 
-    driverXbox.y().whileTrue(mShootStop_CMD);
+    driverXbox.b().whileTrue(mActuator_down_CMD);
 
     // Send Scoop
 
-    driverXbox.a().whileTrue(mScoopToPosition2_CMD);
+    //driverXbox.a().whileTrue(mScoopUP_CMD);
+    //driverXbox.start().whileTrue(mScoopDOWN_CMD);
 
-    // Actuator up and down
+    // Actuator up and downsP
 
-    driverXbox.leftBumper().whileTrue(mActuator_up_CMD);
-    driverXbox.rightBumper().whileTrue(mActuator_down_CMD);
+    //driverXbox.leftBumper().whileTrue(mActuator_up_CMD);
+    //driverXbox.rightBumper().whileTrue(mActuator_down_CMD);
 
     // Scoop up
 
-    driverXbox.x().whileTrue(mScoopUP_CMD);
-    
+    driverXbox.x().whileTrue(mActuator_up_CMD);
 
-    driverXbox.y().whileTrue(mScoopUP_CMD);
-    driverXbox.b().whileTrue(mScoopDOWN_CMD);
-
-    // driverXbox.a().whileTrue(mShoot_CMDautomatic);
-    driverXbox.x().whileTrue(mActuatorToPosition_CMDprecise);
-
-
-    driverXbox.povLeft().whileTrue(mActuator_up_CMD);
-    driverXbox.povRight().whileTrue(mActuator_down_CMD);
-   
-  
-  }
+    driverXbox.a().whileTrue(drivebase.driveCommand(
+        () -> MathUtil.applyDeadband(driverXbox.getLeftY() *0.125, OperatorConstants.LEFT_Y_DEADBAND),
+        () -> MathUtil.applyDeadband(driverXbox.getLeftX() *0.125, OperatorConstants.LEFT_X_DEADBAND),
+        () -> driverXbox.getRightX() * 0.3));
+    }
 
   public void setMotorBrake(boolean brake)
   {

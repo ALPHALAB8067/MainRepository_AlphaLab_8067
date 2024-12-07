@@ -29,8 +29,8 @@ public class AimAndCome extends SubsystemBase {
   double kI = 0.01;
   double kD = 0.0;
 
-  double kP2 = 2.4;
-  double kI2 = 0.05;
+  double kP2 = 2.6;
+  double kI2 = 0.6;
   double kD2 = 0.0;
 
   PIDController mPidController1 = new PIDController(kP, kI, kD);

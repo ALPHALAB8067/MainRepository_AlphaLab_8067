@@ -26,7 +26,7 @@ public class Shoot_CMD extends Command {
   public void execute() {
 
     
-    mShooter_SS.PidSpeedset(mShooter_SS.leftvelocity(), mShooter_SS.rightvelocity());
+    mShooter_SS.PidSpeed(mShooter_SS.leftvelocity(), mShooter_SS.rightvelocity());
   }
 
   // Called once the command ends or is interrupted.

@@ -53,28 +53,28 @@ public final class Constants
   public static final class PositionVelocities
   {
     //1
-    public static  final double RightVelocity1 = 5000; 
+    public static  final double RightVelocity1 = 3000; 
     public static final double LeftVelocity1 = RightVelocity1 - 600;
 
     //2 
 
     public static final double RightVelocity2 = 5000; 
-    public static final double LeftVelocity2 = RightVelocity1 - 600;
+    public static final double LeftVelocity2 = RightVelocity2 - 600;
 
     //3
 
     public static final double RightVelocity3 = 5000; 
-    public static final double LeftVelocity3 = RightVelocity1 - 600;
+    public static final double LeftVelocity3 = RightVelocity3 - 600;
 
     //4
 
     public static final double RightVelocity4 = 5000; 
-    public static final double LeftVelocity4 = RightVelocity1 - 600;
+    public static final double LeftVelocity4 = RightVelocity4 - 600;
 
     //5
 
     public static final double RightVelocity5 = 5000; 
-    public static final double LeftVelocity5 = RightVelocity1 - 600;
+    public static final double LeftVelocity5 = RightVelocity5 - 600;
 
     // Hold time on motor brakes when disabled
     public static final double WHEEL_LOCK_TIME = 10; // seconds
