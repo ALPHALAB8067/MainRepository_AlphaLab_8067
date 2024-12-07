@@ -26,7 +26,7 @@ public class ActuatorToPosition_CMD extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    mActuator_SS.gotopositionfromdashboard();
+    mActuator_SS.Angletogo();
   }
 
   // Called once the command ends or is interrupted.
