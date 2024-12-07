@@ -24,7 +24,7 @@ import frc.robot.subsystems.Actuator_SS;
 public class Scoop_SS extends SubsystemBase {
 
   private final TalonSRX mScoopMotor;
-  private final DigitalInput mLimitSwitch;
+  public final DigitalInput mLimitSwitch;
   public boolean ScoopCalibrationDone = false;
   //Need to check, either 2048 or 8192
   final double gearRatio = 10;
@@ -42,6 +42,7 @@ public class Scoop_SS extends SubsystemBase {
   Double kD;
   public Scoop_SS() {
     mLimitSwitch = new DigitalInput(0);
+    
     mScoopMotor = new TalonSRX(24);
     //set factory default and set basic parameter (not nescessary)
     mScoopMotor.configFactoryDefault();
@@ -58,7 +59,7 @@ public class Scoop_SS extends SubsystemBase {
 		mScoopMotor.config_kI(0, 0.0001, 30);
     SmartDashboard.putNumber("kI",0.0001);
 		mScoopMotor.config_kD(0, 0, 30);
-    SmartDashboard.putNumber("kD",kD);
+    SmartDashboard.putNumber("kD",0);
     mScoopMotor.config_kF(0, 0, 30);
     mScoopMotor.configClosedLoopPeakOutput(0,1);
   }
@@ -83,7 +84,8 @@ public class Scoop_SS extends SubsystemBase {
     cosineScalar = java.lang.Math.cos(radians);
     SmartDashboard.putNumber("cosine",cosineScalar);
     SmartDashboard.putNumber("wanted Scoop position",pPosition);
-    mScoopMotor.set(ControlMode.Position, pPosition * tickPerDegree,DemandType.ArbitraryFeedForward,0.50*cosineScalar);
+    mScoopMotor.set(ControlMode.Position, pPosition * tickPerDegree);
+    //mScoopMotor.set(ControlMode.Position, pPosition * tickPerDegree,DemandType.ArbitraryFeedForward,0.25*cosineScalar);
     //mScoopMotor.set(ControlMode.Position, 30 * tickPerDegree);
 
   }
@@ -98,7 +100,7 @@ public class Scoop_SS extends SubsystemBase {
   }
   public void scoopMedium(){
 
-    mScoopMotor.set(ControlMode.PercentOutput,0.35);
+    mScoopMotor.set(ControlMode.PercentOutput,0.25);
   }
 
   public void scoopDOWN(){
@@ -125,7 +127,9 @@ public class Scoop_SS extends SubsystemBase {
 		mScoopMotor.config_kI(0, SmartDashboard.getNumber("kI",0.0001), 30);
 		mScoopMotor.config_kD(0,SmartDashboard.getNumber("kD",0), 30);
 
-  
+
+    SmartDashboard.putBoolean("LimiySwitch", mLimitSwitch.get());
+    SmartDashboard.putBoolean("LimiySwitch2", !mLimitSwitch.get());
     SmartDashboard.putNumber("scoop encoder Value", getEncodervalue()); 
     SmartDashboard.putNumber("Actual Angle", getEncoderInDegrees());  
     SmartDashboard.putNumber("Scoop Speed", mScoopMotor.getSelectedSensorVelocity());

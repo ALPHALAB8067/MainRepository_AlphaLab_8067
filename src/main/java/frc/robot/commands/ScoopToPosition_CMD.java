@@ -11,6 +11,8 @@ public class ScoopToPosition_CMD extends Command {
   /** Creates a new ScoopToPosition_CMD. */
   Scoop_SS mScoop_SS;
   double mPosition;
+  Command mScoopDOWN_CMD = new ScoopDOWN_CMD(mScoop_SS);
+
   /**
   * @param Position position en degrées
   */
@@ -32,7 +34,9 @@ public class ScoopToPosition_CMD extends Command {
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+  
+  }
 
   // Returns true when the command should end.
   @Override
