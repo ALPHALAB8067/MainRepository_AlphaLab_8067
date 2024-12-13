@@ -13,21 +13,20 @@ import frc.robot.commands.ActuatorCalibration_CMD;
 import frc.robot.commands.ActuatorToPositionSmart_CMD;
 import frc.robot.commands.Actuator_down_CMD;
 import frc.robot.commands.Actuator_up_CMD;
-/*c
 
 import frc.robot.commands.ScoopCalibration_CMD;
 import frc.robot.commands.ScoopDOWN_CMD;
 import frc.robot.commands.ScoopToArm_CMD;
 import frc.robot.commands.ScoopToPosition_CMD;
 import frc.robot.commands.ScoopUP_CMD;
- */
+ 
 import frc.robot.commands.ShootSmart_CMD;
 import frc.robot.commands.ShootStop_CMD;
 import frc.robot.commands.Shoot_CMD;
 import frc.robot.commands.Shoot_CMDautomatic;
 import frc.robot.commands.swervedrive.drivebase.AbsoluteDriveAdv;
 import frc.robot.subsystems.Actuator_SS;
-//import frc.robot.subsystems.Scoop_SS;
+import frc.robot.subsystems.Scoop_SS;
 import frc.robot.subsystems.Shooter_SS;
 import frc.robot.subsystems.swervedrive.AimAndAlign_SS;
 import frc.robot.subsystems.swervedrive.AimAndCome;
@@ -64,16 +63,16 @@ public class RobotContainer
   private final ActuatorToPositionSmart_CMD mActuatorToPosition_CMD = new ActuatorToPositionSmart_CMD(mActuator_SS, 25.0);
 
   // Scoop Subsytem 
-  /*
+  
   private final Scoop_SS mScoop_SS = new Scoop_SS();
 
-  // Scoop Commands
+  //Scoop Commands
   private final ScoopCalibration_CMD mScoopCalibration_CMD = new ScoopCalibration_CMD(mScoop_SS);
   private final ScoopDOWN_CMD mScoopDOWN_CMD = new ScoopDOWN_CMD(mScoop_SS);
   private final ScoopUP_CMD mScoopUP_CMD = new ScoopUP_CMD(mScoop_SS);
   private final ScoopToPosition_CMD mScoopToPosition_CMD = new ScoopToPosition_CMD(mScoop_SS, 30.0 );
   private final ScoopToArm_CMD mScoopToPosition2_CMD = new ScoopToArm_CMD(mScoop_SS,mActuator_SS);
-  */
+
   // Shooter Subsytem
   private final Shooter_SS mShooter_SS = new Shooter_SS();
 
@@ -180,8 +179,13 @@ public class RobotContainer
 
     // Send Scoop
 
+    driverXbox.a().whileTrue(mScoopToPosition2_CMD);
+    driverXbox.a().whileFalse(mScoopToPosition2_CMD);
+    driverXbox.start().whileTrue(mScoopDOWN_CMD);
+
     //driverXbox.a().whileTrue(mScoopUP_CMD);
-    //driverXbox.start().whileTrue(mScoopDOWN_CMD);
+    //driverXbox.a().whileFalse(mScoopDOWN_CMD);
+
 
     // Actuator up and downsP
 
@@ -192,7 +196,7 @@ public class RobotContainer
 
     driverXbox.x().whileTrue(mActuator_up_CMD);
 
-    driverXbox.a().whileTrue(drivebase.driveCommand(
+    driverXbox.leftBumper().whileTrue(drivebase.driveCommand(
         () -> MathUtil.applyDeadband(driverXbox.getLeftY() *0.125, OperatorConstants.LEFT_Y_DEADBAND),
         () -> MathUtil.applyDeadband(driverXbox.getLeftX() *0.125, OperatorConstants.LEFT_X_DEADBAND),
         () -> driverXbox.getRightX() * 0.3));

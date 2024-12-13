@@ -9,6 +9,7 @@ import com.ctre.phoenix.motorcontrol.DemandType;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.revrobotics.CANSparkBase.ControlType;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -95,8 +96,15 @@ public class Scoop_SS extends SubsystemBase {
    return mScoopMotor.getSelectedSensorVelocity()== 0;
   }
 
+  public void scooptoArm(double armPosition) {
+    mScoopMotor.set(ControlMode.PercentOutput, 0.35);
+    if (getEncoderInDegrees() > armPosition-29) {
+      mScoopMotor.set(ControlMode.PercentOutput, 0);
+    }
+  }
+
   public void scoopUP(){
-    mScoopMotor.set(ControlMode.PercentOutput,0.9);
+    mScoopMotor.set(ControlMode.PercentOutput,0.7);
   }
   public void scoopMedium(){
 
@@ -104,7 +112,7 @@ public class Scoop_SS extends SubsystemBase {
   }
 
   public void scoopDOWN(){
-    mScoopMotor.set(ControlMode.PercentOutput,0);
+    mScoopMotor.set(ControlMode.PercentOutput, -0.27);
   }
   
   public double getEncoderInDegrees() {
