@@ -202,10 +202,17 @@ public class RobotContainer
         () -> driverXbox.getRightX() * 0.3));
     }
 
+
+  public void setDriveMode()
+  {
+    configureBindings();
+  }
     public Command getAutonomousCommand()
     {
       // An example command will be run in autonomous
-      return drivebase.getAutonomousCommand("best auto");
+          System.out.println("3 note auto");
+
+      return drivebase.getAutonomousCommand("3 note auto");
     }
 
   public void setMotorBrake(boolean brake)

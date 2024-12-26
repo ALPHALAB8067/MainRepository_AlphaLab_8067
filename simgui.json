@@ -1,10 +1,5 @@
 {
   "HALProvider": {
-    "DIO": {
-      "window": {
-        "visible": true
-      }
-    },
     "Other Devices": {
       "SPARK MAX [2]": {
         "header": {
@@ -65,6 +60,11 @@
       "/SmartDashboard/navX-Sensor[4]": "Gyro"
     },
     "windows": {
+      "/FMSInfo": {
+        "window": {
+          "visible": true
+        }
+      },
       "/SmartDashboard/Field": {
         "bottom": 1476,
         "height": 8.210550308227539,
@@ -75,10 +75,58 @@
         "window": {
           "visible": true
         }
+      },
+      "/SmartDashboard/navX-Sensor[4]": {
+        "window": {
+          "visible": true
+        }
+      }
+    }
+  },
+  "NetworkTables": {
+    "Retained Values": {
+      "open": false
+    },
+    "transitory": {
+      "LiveWindow": {
+        "open": true
+      },
+      "PathPlanner": {
+        "HotReload": {
+          "open": true
+        },
+        "open": true
+      },
+      "SmartDashboard": {
+        "open": true
+      },
+      "photonvision": {
+        "open": true,
+        "photo2": {
+          "open": true
+        }
       }
     }
   },
   "NetworkTables Info": {
+    "Connections": {
+      "open": true
+    },
+    "DartClient_5040389@1": {
+      "Publishers": {
+        "open": true
+      },
+      "Subscribers": {
+        "open": true
+      },
+      "open": true
+    },
+    "Server": {
+      "Subscribers": {
+        "open": true
+      },
+      "open": true
+    },
     "visible": true
   },
   "Plot": {
