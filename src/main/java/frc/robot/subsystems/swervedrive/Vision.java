@@ -100,7 +100,7 @@ public class Vision
   }
 
   /**
-   * Calculates a target pose relative to an AprilTag on the field.
+   * Calculates a taret pose relative to an AprilTag on the field.
    *
    * @param aprilTag    The ID of the AprilTag.
    * @param robotOffset The offset {@link Transform2d} of the robot to apply to the pose for the robot to position
@@ -159,10 +159,11 @@ public class Vision
   {
     Optional<EstimatedRobotPose> poseEst = filterPose(camera.poseEstimator.update());
     // Uncomment to enable outputting of vision targets in sim.
-    /*
+    
      poseEst.ifPresent(estimatedRobotPose -> field2d.getObject(camera + " est pose")
                                                     .setPose(estimatedRobotPose.estimatedPose.toPose2d()));
-    */
+  
+                                                    
     return poseEst;
   }
 
@@ -318,6 +319,10 @@ public class Vision
     return visionSim;
   }
 
+  public Field2d getSimDebugField() {
+    return visionSim.getDebugField();
+}
+
   /**
    * Open up the photon vision camera streams on the localhost, assumes running photon vision on localhost.
    */
@@ -325,15 +330,14 @@ public class Vision
   {
     if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE))
     {
-//      try
-//      {
-//        Desktop.getDesktop().browse(new URI("http://localhost:1182/"));
-//        Desktop.getDesktop().browse(new URI("http://localhost:1184/"));
-//        Desktop.getDesktop().browse(new URI("http://localhost:1186/"));
-//      } catch (IOException | URISyntaxException e)
-//      {
-//        e.printStackTrace();
-//      }
+     try
+      {
+        Desktop.getDesktop().browse(new URI("http://localhost:1182/"));
+        Desktop.getDesktop().browse(new URI("http://localhost:1184/"));
+        Desktop.getDesktop().browse(new URI("http://localhost:1186/"));
+      } catch (IOException | URISyntaxException e)      {
+       e.printStackTrace();
+    }
     }
   }
 
@@ -394,7 +398,7 @@ public class Vision
      * Center Camera
      */
     CENTER_CAM("center",
-               new Rotation3d(0, Units.degreesToRadians(0), 0),
+               new Rotation3d(20, Units.degreesToRadians(0), 0),
                new Translation3d(Units.inchesToMeters(-4.628),
                                  Units.inchesToMeters(-10.687),
                                  Units.inchesToMeters(16.129)),
@@ -480,7 +484,7 @@ public class Vision
       if (Robot.isSimulation())
       {
         systemSim.addCamera(cameraSim, robotToCamTransform);
-//        cameraSim.enableDrawWireframe(true);
+       cameraSim.enableDrawWireframe(true);
       }
     }
   }

@@ -84,7 +84,7 @@
     }
   },
   "NetworkTables": {
-    "Retained Values": {
+    "Persistent Values": {
       "open": false
     },
     "transitory": {
@@ -97,7 +97,19 @@
         },
         "open": true
       },
+      "Shuffleboard": {
+        ".metadata": {
+          "open": true
+        },
+        ".recording": {
+          "open": true
+        },
+        "open": true
+      },
       "SmartDashboard": {
+        "Swerve Drive": {
+          "open": true
+        },
         "open": true
       },
       "photonvision": {
@@ -109,6 +121,18 @@
     }
   },
   "NetworkTables Info": {
+    "AdvantageScope@1": {
+      "Publishers": {
+        "open": true
+      },
+      "Subscribers": {
+        "open": true
+      },
+      "open": true
+    },
+    "Clients": {
+      "open": true
+    },
     "Connections": {
       "open": true
     },
@@ -121,7 +145,19 @@
       },
       "open": true
     },
+    "DartClient_51768752@2": {
+      "Publishers": {
+        "open": true
+      },
+      "Subscribers": {
+        "open": true
+      },
+      "open": true
+    },
     "Server": {
+      "Publishers": {
+        "open": true
+      },
       "Subscribers": {
         "open": true
       },

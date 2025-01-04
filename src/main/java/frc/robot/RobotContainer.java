@@ -125,13 +125,13 @@ public class RobotContainer
     // right stick controls the angular velocity of the robot
 
     Command driveFieldOrientedAnglularVelocity = drivebase.driveCommand(
-        () -> MathUtil.applyDeadband(driverXbox.getLeftX() *0.4 , OperatorConstants.LEFT_Y_DEADBAND),
-        () -> MathUtil.applyDeadband(driverXbox.getLeftY() *-0.4, OperatorConstants.LEFT_X_DEADBAND),
+        () -> MathUtil.applyDeadband(driverXbox.getLeftY() *0.4 , OperatorConstants.LEFT_Y_DEADBAND),
+        () -> MathUtil.applyDeadband(driverXbox.getLeftX() *0.4, OperatorConstants.LEFT_X_DEADBAND),
         () -> driverXbox.getRightX() * 0.6);
 
     Command driveFieldOrientedDirectAngleSim = drivebase.simDriveCommand(
-        () -> MathUtil.applyDeadband(driverXbox.getLeftY(), OperatorConstants.LEFT_Y_DEADBAND),
-        () -> MathUtil.applyDeadband(driverXbox.getLeftX(), OperatorConstants.LEFT_X_DEADBAND),
+        () -> MathUtil.applyDeadband(driverXbox.getLeftX(), OperatorConstants.LEFT_Y_DEADBAND),
+        () -> MathUtil.applyDeadband(driverXbox.getLeftY(), OperatorConstants.LEFT_X_DEADBAND),
         () -> driverXbox.getRawAxis(2));
 
     drivebase.setDefaultCommand(
@@ -212,7 +212,7 @@ public class RobotContainer
       // An example command will be run in autonomous
           System.out.println("3 note auto");
 
-      return drivebase.getAutonomousCommand("3 note auto");
+      return drivebase.getAutonomousCommand("Straight");
     }
 
   public void setMotorBrake(boolean brake)
