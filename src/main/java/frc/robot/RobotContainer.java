@@ -2,9 +2,13 @@ package frc.robot;
 
 import java.io.File;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.RobotBase;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.OperatorConstants;
@@ -51,6 +55,7 @@ public class RobotContainer
        
   // April Tag commands 
   private final Getinthebox_AutoCMD mGetinthebox_AutoCMD = new Getinthebox_AutoCMD(drivebase, aimAndCome, AimAndAlign_SS);
+  private SendableChooser<Command> autoChooser;
 
   // Actuator Subsytem
   private final Actuator_SS mActuator_SS = new Actuator_SS();
@@ -210,9 +215,12 @@ public class RobotContainer
     public Command getAutonomousCommand()
     {
       // An example command will be run in autonomous
-          System.out.println("3 note auto");
+          autoChooser = AutoBuilder.buildAutoChooser();
+          SmartDashboard.putData("Auto Chooser", autoChooser);
 
-      return drivebase.getAutonomousCommand("Straight");
+
+
+      return autoChooser.getSelected();
     }
 
   public void setMotorBrake(boolean brake)
